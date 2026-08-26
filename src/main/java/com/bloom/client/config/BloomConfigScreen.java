@@ -62,10 +62,16 @@ public final class BloomConfigScreen {
 	}
 
 	private static OptionGroup bloom$buildOverridesInUseGroup(BloomConfig.Data defaults, BloomConfig.Data editing, Map<String, BlockEntry> blockEntryById) {
-		OptionGroup.Builder builder = OptionGroup.createBuilder()
-			.name(Component.translatable("shine.config.group.overrides_in_use"))
-			.description(OptionDescription.of(Component.translatable("shine.config.group.overrides_in_use.desc")))
-			.collapsed(true);
+			OptionGroup.Builder builder = OptionGroup.createBuilder()
+				.name(Component.translatable("shine.config.group.overrides_in_use"))
+				.description(OptionDescription.of(Component.translatable("shine.config.group.overrides_in_use.desc")))
+				.collapsed(true)
+				.option(ButtonOption.createBuilder()
+					.name(Component.translatable("shine.config.reset_source"))
+					.text(Component.translatable("shine.config.reset_source.value"))
+					.description(OptionDescription.of(Component.translatable("shine.config.reset_source.desc")))
+					.action((screen, option) -> bloom$resetSourceOverrides(defaults, editing))
+					.build());
 
 		List<String> overrideIds = new ArrayList<>();
 		for (String blockId : editing.blockStrengthOverrides.keySet()) {
@@ -98,10 +104,17 @@ public final class BloomConfigScreen {
 	}
 
 	private static OptionGroup bloom$buildGlobalSettingsGroup(BloomConfig.Data defaults, BloomConfig.Data editing) {
-		return OptionGroup.createBuilder()
-			.name(Component.translatable("shine.config.group.global"))
-			.description(OptionDescription.of(Component.translatable("shine.config.group.global.desc")))
-			.option(
+					return OptionGroup.createBuilder()
+				.name(Component.translatable("shine.config.group.global"))
+				.description(OptionDescription.of(Component.translatable("shine.config.group.global.desc")))
+				.option(ButtonOption.createBuilder()
+					.name(Component.translatable("shine.config.reset_globals"))
+					.text(Component.translatable("shine.config.reset_globals.value"))
+					.description(OptionDescription.of(Component.translatable("shine.config.reset_globals.desc")))
+					.action((screen, option) -> bloom$resetGlobals(defaults, editing))
+					.build())
+				.option(
+
 				Option.<Boolean>createBuilder()
 					.name(Component.translatable("shine.config.enabled"))
 					.description(OptionDescription.of(Component.translatable("shine.config.enabled.desc")))
@@ -283,7 +296,34 @@ public final class BloomConfigScreen {
 		data.blockStrengthOverrides.put(entry.id(), strength);
 	}
 
-	private static double bloom$clampSourceStrength(double value) {
+			private static void bloom$resetSourceOverrides(BloomConfig.Data defaults, BloomConfig.Data editing) {
+			editing.blockStrengthOverrides = new java.util.LinkedHashMap<>(defaults.blockStrengthOverrides);
+			editing.sourceStrengthOverrides = editing.blockStrengthOverrides;
+			editing.stateSourceStrengthOverrides.clear();
+			editing.entityTextureStrengthOverrides.clear();
+			editing.particleStrengthOverrides.clear();
+			editing.sourceRadiusProfiles.clear();
+		}
+
+		private static void bloom$resetGlobals(BloomConfig.Data defaults, BloomConfig.Data editing) {
+			editing.enabled = defaults.enabled;
+			editing.strength = defaults.strength;
+			editing.threshold = defaults.threshold;
+			editing.radius = defaults.radius;
+			editing.tinyRadius = defaults.tinyRadius;
+			editing.broadRadius = defaults.broadRadius;
+			editing.blurPassCount = defaults.blurPassCount;
+			editing.bloomDistance = defaults.bloomDistance;
+			editing.highlightClamp = defaults.highlightClamp;
+			editing.softKnee = defaults.softKnee;
+			editing.defaultLightSourceStrength = defaults.defaultLightSourceStrength;
+			editing.defaultNonLightStrength = defaults.defaultNonLightStrength;
+			editing.defaultEntityTextureStrength = defaults.defaultEntityTextureStrength;
+			editing.defaultParticleStrength = defaults.defaultParticleStrength;
+		}
+
+		private static double bloom$clampSourceStrength(double value) {
+
 		return Math.max(BloomConfig.MIN_SOURCE_STRENGTH, Math.min(BloomConfig.MAX_SOURCE_STRENGTH, value));
 	}
 
