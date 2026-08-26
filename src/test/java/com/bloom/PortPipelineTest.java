@@ -54,13 +54,18 @@ public final class PortPipelineTest {
 
     private static void testPostChainBindings() throws Exception {
         String json = Files.readString(RESOURCES.resolve("assets/shine/shaders/post/bloom_poc.json"));
-        for (String sampler : new String[] {"DepthSampler", "SourceSampler", "InSampler", "MainSampler", "HalfSampler"}) {
-            require(json.contains("\"sampler_name\": \"" + sampler + "\""), "missing sampler binding: " + sampler);
+        String extractProgram = Files.readString(RESOURCES.resolve("assets/shine/shaders/program/bloom_extract.json"));
+        String compositeProgram = Files.readString(RESOURCES.resolve("assets/shine/shaders/program/bloom_composite.json"));
+        for (String sampler : new String[] {"DepthSampler", "SourceSampler"}) {
+            require(extractProgram.contains("\"name\": \"" + sampler + "\""), "missing extract sampler binding: " + sampler);
+        }
+        for (String sampler : new String[] {"MainSampler", "HalfSampler", "DepthSampler"}) {
+            require(compositeProgram.contains("\"name\": \"" + sampler + "\""), "missing composite sampler binding: " + sampler);
         }
         for (String uniform : new String[] {"SourceStrengthScale", "DistanceFadeRange", "Weight0", "Weight1", "Weight2", "Weight3", "Weight4", "Weight5"}) {
             require(json.contains("\"name\": \"" + uniform + "\""), "missing PostChain uniform: " + uniform);
         }
-        require(json.contains("\"target\": \"source\""), "missing source target binding");
+        require(json.contains("\"intarget\": \"source\"") && json.contains("\"source\""), "missing source target binding");
         String defaults = Files.readString(RESOURCES.resolve("assets/shine/defaults/shine.json"));
         for (String original : new String[] {"\"strength\": 8.0", "\"radius\": 500.0", "\"tinyRadius\": 90.0", "\"broadRadius\": 700.0", "\"bloomDistance\": 256.0", "\"highlightClamp\": 0.28", "\"softKnee\": 0.2", "\"minecraft:sculk\": 500.0", "\"minecraft:torch\": 499.0"}) {
             require(defaults.contains(original), "original visual default missing: " + original);

@@ -19,7 +19,7 @@ import org.lwjgl.opengl.GL30;
 
 /** Minecraft 1.20.1 implementation backed by the legacy RenderTarget/PostChain pipeline. */
 public final class BloomPostProcessor {
-    private static final ResourceLocation CHAIN_ID = new ResourceLocation("shine", "bloom_poc");
+    private static final ResourceLocation CHAIN_ID = new ResourceLocation("shine", "shaders/post/bloom_poc.json");
     private static PostChain runtimeChain;
     private static int chainWidth = -1;
     private static int chainHeight = -1;
