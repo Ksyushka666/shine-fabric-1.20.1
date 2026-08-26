@@ -38,10 +38,12 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          tag="build-${GITHUB_RUN_NUMBER}"
-          gh release create "$tag" build/libs/shine-1.0.0.jar build/libs/shine-1.0.0-sources.jar \
+          version=$(grep '^mod_version=' gradle.properties | cut -d= -f2)
+          artifact="shine-fabric-1.20.1-${version}"
+          tag="v${version}-build-${GITHUB_RUN_NUMBER}"
+          gh release create "$tag" build/libs/${artifact}.jar build/libs/${artifact}-sources.jar \
             --repo "$GITHUB_REPOSITORY" \
             --target "$GITHUB_SHA" \
-            --title "Shine Fabric 1.20.1 build ${GITHUB_RUN_NUMBER}" \
+            --title "Shine Fabric 1.20.1 ${version}" \
             --notes "Automated release created after a successful clean check build. Commit: ${GITHUB_SHA}." \
             --latest

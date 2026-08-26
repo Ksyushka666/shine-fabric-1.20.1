@@ -51,3 +51,7 @@ Copyright © 2026 tapeQ
 ## Continuous integration
 
 Every push, pull request, or manual workflow dispatch runs `./gradlew clean check build` on Java 17. The workflow uploads the verified mod and sources JARs only when the build succeeds. Optional YACL, Mod Menu, and Sodium integrations resolve from Maven coordinates, so the build does not depend on a local developer cache.
+
+## Versioning
+
+The mod version is controlled by `mod_version` in `gradle.properties`. Release artifacts use the format `shine-fabric-1.20.1-<mod_version>.jar`, with the sources artifact ending in `-sources.jar`. The release workflow reads this value after a successful build and creates a unique release tag for the build.
