@@ -18,6 +18,18 @@ Little to **no performance loss** when enabled, with support for [Sodium](https:
 
 **Highly customizable** and **easy to use** config screen. You can change almost everything to your preference.
 
+## Downloads
+
+The latest verified build is **Shine Fabric 1.20.1 1.0.3**. Download the files directly from [GitHub Releases](https://github.com/Ksyushka666/shine-fabric-1.20.1/releases/tag/v1.0.3-build-10):
+
+| File | Download |
+|---|---|
+| Mod JAR | [shine-fabric-1.20.1-1.0.3.jar](https://github.com/Ksyushka666/shine-fabric-1.20.1/releases/download/v1.0.3-build-10/shine-fabric-1.20.1-1.0.3.jar) |
+| Sources JAR | [shine-fabric-1.20.1-1.0.3-sources.jar](https://github.com/Ksyushka666/shine-fabric-1.20.1/releases/download/v1.0.3-build-10/shine-fabric-1.20.1-1.0.3-sources.jar) |
+| SHA-256 checksums | [SHA256SUMS.txt](https://github.com/Ksyushka666/shine-fabric-1.20.1/releases/download/v1.0.3-build-10/SHA256SUMS.txt) |
+
+For future builds, the [Releases page](https://github.com/Ksyushka666/shine-fabric-1.20.1/releases) always contains the newest automatically verified download links.
+
 ## Requirements and installation
 
 For **Minecraft 1.20.1**, the minimum installation requires **Fabric Loader**, **Fabric API for 1.20.1**, Java 17, and the Shine JAR from the [latest release](https://github.com/Ksyushka666/shine-fabric-1.20.1/releases). Put the following files in `.minecraft/mods/`:
