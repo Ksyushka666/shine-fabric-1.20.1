@@ -3,6 +3,7 @@ package com.bloom.client;
 import com.bloom.BloomMod;
 import com.bloom.client.config.BloomConfig;
 import com.bloom.client.config.ExperimentalConfigManager;
+import com.bloom.client.ambience.ShineAmbienceManager;
 import com.bloom.client.render.BloomPostProcessor;
 import com.bloom.client.particle.ShineParticleRegistry;
 import net.fabricmc.api.ClientModInitializer;
@@ -42,8 +43,10 @@ public class BloomClient implements ClientModInitializer {
 		ExperimentalConfigManager.load();
 		ShineParticleRegistry.registerFactories();
 
-		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			while (TOGGLE_BLOOM_KEY.consumeClick()) {
+					ClientTickEvents.END_CLIENT_TICK.register(client -> {
+				ShineAmbienceManager.tick(client);
+				while (TOGGLE_BLOOM_KEY.consumeClick()) {
+
 				boolean enabled = BloomPostProcessor.toggleFromKeybind();
 				BloomMod.LOGGER.info("Shine post-processing {}", enabled ? "enabled" : "disabled");
 			}
@@ -55,7 +58,10 @@ public class BloomClient implements ClientModInitializer {
 			// DISCONNECT is delivered from the network event path in some Fabric/Sodium
 			// combinations. Never execute GL cleanup directly from that callback: GL
 			// context is owned by Minecraft's render thread.
-			ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> client.execute(BloomPostProcessor::shutdown));
+			ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> client.execute(() -> {
+					ShineAmbienceManager.reset();
+					BloomPostProcessor.shutdown();
+				}));
 			ClientLifecycleEvents.CLIENT_STOPPING.register(client -> client.execute(BloomPostProcessor::shutdown));
 
 	}
