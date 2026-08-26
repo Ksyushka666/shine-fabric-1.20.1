@@ -12,8 +12,8 @@ in vec4 vertexColor;
 in vec2 texCoord0;
 in float bloomStrength;
 
-layout(location = 0) out vec4 fragColor;
-layout(location = 1) out vec4 bloomColor;
+out vec4 fragColor;
+out vec4 bloomColor;
 
 vec4 sampleNearest(sampler2D sampler, vec2 uv, vec2 pixelSize, vec2 du, vec2 dv, vec2 texelScreenSize) {
     vec2 uvTexelCoords = uv / pixelSize;

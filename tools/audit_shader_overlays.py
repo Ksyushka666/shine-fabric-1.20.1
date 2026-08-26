@@ -16,8 +16,10 @@ for shader in visual_fsh + [core / 'particle.fsh']:
         errors.append(f'missing_overlay={shader}')
         continue
     text = shader.read_text(errors='ignore')
-    if 'layout(location = 1) out vec4 bloomColor' not in text:
+    if 'out vec4 bloomColor;' not in text:
         errors.append(f'missing_bloom_output={shader.name}')
+    if 'layout(location' in text:
+        errors.append(f'glsl150_incompatible_output_layout={shader.name}')
 for shader in visual_json + [core / 'particle.json']:
     if not shader.is_file():
         continue

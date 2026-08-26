@@ -10,7 +10,7 @@ in float vertexDistance;
 in vec2 texCoord0;
 in vec4 vertexColor;
 out vec4 fragColor;
-layout(location = 1) out vec4 bloomColor;
+out vec4 bloomColor;
 void main() {
     vec4 color = texture(Sampler0, texCoord0) * vertexColor * ColorModulator;
     if (color.a < 0.1) discard;

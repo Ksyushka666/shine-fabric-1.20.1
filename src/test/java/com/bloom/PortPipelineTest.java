@@ -92,7 +92,7 @@ public final class PortPipelineTest {
         require(extract.contains("uniform float SourceStrengthScale") && extract.contains("uniform float DistanceFadeRange"), "extract scalar uniforms mismatch");
         require(blur.contains("uniform sampler2D InSampler") && blur.contains("uniform vec2 BlurDir"), "blur uniforms mismatch");
         require(composite.contains("uniform sampler2D HalfSampler") && composite.contains("uniform float Weight5"), "composite uniforms mismatch");
-        require(terrain.contains("layout(location = 1) out vec4 bloomColor"), "terrain bloom output missing");
+        require(terrain.contains("out vec4 bloomColor;") && !terrain.contains("layout(location"), "terrain bloom output missing or GLSL 1.50-incompatible");
     }
 
     private static void testLifecycleCleanup() throws Exception {
@@ -242,7 +242,7 @@ public final class PortPipelineTest {
         String shaderJson = Files.readString(RESOURCES.resolve("assets/minecraft/shaders/core/particle.json"));
         String shaderHook = Files.readString(JAVA.resolve("com/bloom/mixin/client/ShaderInstanceBloomUniformMixin.java"));
         String fog = Files.readString(RESOURCES.resolve("assets/minecraft/shaders/include/fog.glsl"));
-        require(particle.contains("layout(location = 1) out vec4 bloomColor"), "particle bloom output declaration missing");
+        require(particle.contains("out vec4 bloomColor;") && !particle.contains("layout(location"), "particle bloom output declaration missing or GLSL 1.50-incompatible");
         require(particle.contains("ShineParticleStrength"), "particle source strength uniform missing");
         require(shaderJson.contains("ShineParticleStrength"), "particle shader uniform is not declared in JSON");
         require(shaderHook.contains("getUniform(\"ShineParticleStrength\")"), "particle shader uniform hook missing");
@@ -258,7 +258,7 @@ public final class PortPipelineTest {
             stream.filter(path -> path.getFileName().toString().contains("entity") && path.toString().endsWith(".fsh") && !service.contains(path.getFileName().toString().replace(".fsh", ""))).forEach(path -> {
                 try {
                     String text = Files.readString(path);
-                    require(text.contains("layout(location = 1) out vec4 bloomColor"), "entity bloom output missing: " + path.getFileName());
+                    require(text.contains("out vec4 bloomColor;") && !text.contains("layout(location"), "entity bloom output missing or GLSL 1.50-incompatible: " + path.getFileName());
                     require(text.contains("ShineEntityStrength"), "entity source uniform missing: " + path.getFileName());
                 } catch (IOException exception) {
                     throw new RuntimeException(exception);

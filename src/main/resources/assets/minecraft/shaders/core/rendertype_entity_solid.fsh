@@ -18,7 +18,7 @@ in vec2 texCoord0;
 in vec4 normal;
 
 out vec4 fragColor;
-layout(location = 1) out vec4 bloomColor;
+out vec4 bloomColor;
 
 void main() {
     vec4 color = texture(Sampler0, texCoord0) * vertexColor * ColorModulator;
