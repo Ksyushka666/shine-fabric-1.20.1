@@ -208,13 +208,6 @@
       { "name": "shine:psychedelic/echo_hallucination_04", "stream": true }
     ]
   },
-  "firefly_bush_ambient": {
-    "sounds": [
-      { "name": "minecraft:block/firefly_bush/firefly_bush3" },
-      { "name": "minecraft:block/firefly_bush/firefly_bush6" },
-      { "name": "minecraft:block/firefly_bush/firefly_bush11" }
-    ]
-  },
   "cicada_ambient": {
     "sounds": [
       { "name": "shine:ambient/cicada_01", "stream": true, "attenuation_distance": 32 }
