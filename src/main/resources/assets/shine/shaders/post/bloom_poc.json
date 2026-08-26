@@ -9,11 +9,7 @@
         { "name": "Threshold", "values": [ 0.65 ] },
         { "name": "SourceStrengthScale", "values": [ 1.25 ] },
         { "name": "HighlightClamp", "values": [ 1.0 ] },
-        { "name": "SoftKnee", "values": [ 0.2 ] },
-        { "name": "MaxDistance", "values": [ 64.0 ] },
-        { "name": "NearPlane", "values": [ 0.05 ] },
-        { "name": "FarPlane", "values": [ 1024.0 ] },
-        { "name": "DistanceFadeRange", "values": [ 16.0 ] }
+        { "name": "SoftKnee", "values": [ 0.2 ] }
       ]
     },
     {
@@ -47,11 +43,7 @@
         { "name": "Weight2", "values": [ 0.0 ] },
         { "name": "Weight3", "values": [ 0.0 ] },
         { "name": "Weight4", "values": [ 0.0 ] },
-        { "name": "Weight5", "values": [ 0.0 ] },
-        { "name": "MaxDistance", "values": [ 64.0 ] },
-        { "name": "NearPlane", "values": [ 0.05 ] },
-        { "name": "FarPlane", "values": [ 1024.0 ] },
-        { "name": "DistanceFadeRange", "values": [ 16.0 ] }
+        { "name": "Weight5", "values": [ 0.0 ] }
       ]
     }
   ]

@@ -13,12 +13,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class SodiumShaderChunkRendererMixin {
     @Inject(method = "begin", at = @At("HEAD"), require = 0)
     private void shine$enableBloomAttachment(TerrainRenderPass pass, CallbackInfo ci) {
-        if (!pass.isReverseOrder()) BloomSourceRenderer.attachSourceToCurrentFramebuffer();
+        // Disabled on 1.20.1: the secondary draw buffer corrupts Intel/Sodium framebuffers.
     }
 
     @Inject(method = "end", at = @At("RETURN"), require = 0)
     private void shine$disableBloomAttachment(TerrainRenderPass pass, CallbackInfo ci) {
-        if (!pass.isReverseOrder()) BloomSourceRenderer.detachSourceFromCurrentFramebuffer();
+        // Source is captured from the completed main target by BloomPostProcessor.
     }
 
     @Redirect(
@@ -34,7 +34,6 @@ public abstract class SodiumShaderChunkRendererMixin {
         String name,
         int index
     ) {
-        if (!"fragColor".equals(name)) return builder.bindFragmentData(name, index);
-        return builder.bindFragmentData(name, index).bindFragmentData("bloomColor", 1);
+        return builder.bindFragmentData(name, index);
     }
 }

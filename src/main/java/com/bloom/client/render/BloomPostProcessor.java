@@ -63,21 +63,20 @@ public final class BloomPostProcessor {
         BloomConfig.Data config = BloomConfig.get();
         if (!config.enabled || shouldSkipForIris() || config.strength <= 0.0001) return;
         Minecraft minecraft = Minecraft.getInstance();
-        if (minecraft.level == null || !BloomSourceRenderer.hasPreparedSourceThisFrame()) return;
+        if (minecraft.level == null) return;
 
         RenderTarget main = minecraft.getMainRenderTarget();
         if (main == null || main.width <= 0 || main.height <= 0) return;
         PostChain chain = ensureChain(main.width, main.height);
         if (chain == null) return;
 
-        RenderTarget source = BloomSourceRenderer.getSourceTarget();
         RenderTarget chainSource = chain.getTempTarget("source");
         int[] previousViewport = new int[4];
         GL11.glGetIntegerv(GL11.GL_VIEWPORT, previousViewport);
         boolean previousBlend = GL11.glIsEnabled(GL11.GL_BLEND);
         boolean previousDepth = GL11.glIsEnabled(GL11.GL_DEPTH_TEST);
         try {
-            if (source != null && chainSource != null) copyTarget(source, chainSource);
+            if (chainSource != null) copyTarget(main, chainSource);
             applyConfigUniforms(chain, config);
             chain.process(0.0F);
         } catch (RuntimeException exception) {

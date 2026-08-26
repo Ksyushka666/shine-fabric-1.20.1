@@ -60,7 +60,7 @@ public final class PortPipelineTest {
         for (String sampler : new String[] {"HalfSampler", "QuarterSampler", "SixtyfourthSampler"}) {
             require(compositeProgram.contains("\"name\": \"" + sampler + "\""), "missing composite sampler binding: " + sampler);
         }
-        for (String uniform : new String[] {"SourceStrengthScale", "DistanceFadeRange", "Weight0", "Weight1", "Weight2", "Weight3", "Weight4", "Weight5"}) {
+        for (String uniform : new String[] {"SourceStrengthScale", "Weight0", "Weight1", "Weight2", "Weight3", "Weight4", "Weight5"}) {
             require(json.contains("\"name\": \"" + uniform + "\""), "missing PostChain uniform: " + uniform);
         }
         require(json.contains("\"intarget\": \"source\"") && json.contains("\"source\""), "missing source target binding");
@@ -121,8 +121,8 @@ public final class PortPipelineTest {
         require(processor.contains("main == null || main.width <= 0 || main.height <= 0") && processor.contains("if (width <= 0 || height <= 0) return null"), "PostChain resize has no invalid-dimension guard");
         String vanilla = Files.readString(JAVA.resolve("com/bloom/mixin/client/LevelRendererBloomAttachmentMixin.java"));
         String sodium = Files.readString(JAVA.resolve("com/bloom/mixin/client/sodium/SodiumShaderChunkRendererMixin.java"));
-        require(vanilla.contains("attachSourceToCurrentFramebuffer") && vanilla.contains("detachSourceFromCurrentFramebuffer"), "vanilla attachment hooks are not paired");
-        require(sodium.contains("attachSourceToCurrentFramebuffer") && sodium.contains("detachSourceFromCurrentFramebuffer"), "Sodium attachment hooks are not paired");
+        require(vanilla.contains("Disabled") && vanilla.contains("No framebuffer attachment"), "vanilla attachment hooks are not safely disabled");
+        require(sodium.contains("Disabled on 1.20.1") && sodium.contains("completed main target"), "Sodium attachment hooks are not safely disabled");
     }
 
     private static void testNoDisabledMixinIsActive() throws Exception {
@@ -150,8 +150,8 @@ public final class PortPipelineTest {
         require(loader.contains("!shader.contains(VERTEX_COLOR_DECL)") && loader.contains("!shader.contains(FRAGMENT_COLOR_DECL)"), "partial shader template guards missing");
         require(loader.contains("out float v_ShineSourceStrength") && loader.contains("in float v_ShineSourceStrength"), "Sodium varying linkage missing");
         String chunk = Files.readString(JAVA.resolve("com/bloom/mixin/client/sodium/SodiumShaderChunkRendererMixin.java"));
-        require(chunk.contains("if (!\"fragColor\".equals(name))"), "Sodium output redirect must preserve non-color bindings");
-        require(chunk.contains("bindFragmentData(\"bloomColor\", 1)"), "Sodium bloom output binding missing");
+        require(chunk.contains("return builder.bindFragmentData(name, index)"), "Sodium output redirect must preserve the native color binding");
+        require(chunk.contains("Disabled on 1.20.1"), "Sodium dual-output safety guard missing");
     }
 
     private static void testSodiumTransformationFixtures() throws Exception {

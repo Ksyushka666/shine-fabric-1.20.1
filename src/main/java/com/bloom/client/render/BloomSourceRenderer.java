@@ -68,8 +68,16 @@ public final class BloomSourceRenderer {
         }
     }
 
-    /** Attach source texture to COLOR_ATTACHMENT1 of the currently bound terrain framebuffer. */
+    /**
+     * The legacy 1.20.1/Sodium/Iris path does not guarantee that the currently bound
+     * terrain framebuffer can accept a second color attachment. Writing COLOR_ATTACHMENT1
+     * here corrupts draw buffers on Intel and produces the split-world artifacts seen in
+     * Tt1TBJI. Source capture therefore stays disabled; BloomPostProcessor uses a safe
+     * main-target copy instead.
+     */
     public static void attachSourceToCurrentFramebuffer() {
+        return;
+        /*
         if (!preparedThisFrame || sourceTarget == null || attached) return;
         attachedFramebuffer = GL11.glGetInteger(GL30.GL_FRAMEBUFFER_BINDING);
         previousDrawBuffer0 = GL11.glGetInteger(GL30.GL_DRAW_BUFFER0);
@@ -93,10 +101,13 @@ public final class BloomSourceRenderer {
             return;
         }
         attached = true;
+        */
     }
 
     /** Stop dual output and detach source texture while preserving its rendered contents. */
     public static void detachSourceFromCurrentFramebuffer() {
+        return;
+        /*
         if (!attached) return;
         int currentFramebuffer = GL11.glGetInteger(GL30.GL_FRAMEBUFFER_BINDING);
         try {
@@ -117,6 +128,7 @@ public final class BloomSourceRenderer {
             previousColorAttachment1 = 0;
             attached = false;
         }
+        */
     }
 
     public static RenderTarget getSourceTarget() {

@@ -15,11 +15,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class LevelRendererBloomAttachmentMixin {
     @Inject(method = "renderChunkLayer", at = @At("HEAD"))
     private void shine$attachBloomTarget(RenderType renderType, PoseStack poseStack, double cameraX, double cameraY, double cameraZ, Matrix4f projection, CallbackInfo ci) {
-        if (renderType == RenderType.solid()) BloomSourceRenderer.attachSourceToCurrentFramebuffer();
+        // Disabled: bloom captures the completed main framebuffer safely after world render.
     }
 
     @Inject(method = "renderChunkLayer", at = @At("RETURN"))
     private void shine$detachBloomTarget(RenderType renderType, PoseStack poseStack, double cameraX, double cameraY, double cameraZ, Matrix4f projection, CallbackInfo ci) {
-        if (renderType == RenderType.solid()) BloomSourceRenderer.detachSourceFromCurrentFramebuffer();
+        // No framebuffer attachment is modified on the legacy 1.20.1 path.
     }
 }
