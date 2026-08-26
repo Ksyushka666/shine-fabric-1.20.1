@@ -280,3 +280,7 @@ The latest `gradle clean check build` completed successfully with all 27 tasks p
 Added `resourceHookAudit` to Gradle `check`. It verifies all 84 particle definitions are represented by common registration, the generic client factory loop is active, the `post_effect/bloom_poc.json` resource exists, both world-render hooks are registered, the PostProcessor references the active chain, and both bundled configuration baselines are present. The initial audit correctly exposed path/registration assumptions in the audit itself; those were aligned with the actual 1.20.1 implementation. Final result: 84 particle definitions, one active PostChain resource, two world hooks and zero errors.
 
 The latest `gradle clean check build` completed successfully with all 28 tasks passing.
+
+## Public CI portability fix
+
+The public GitHub Actions build initially failed because the runner's Gradle 9 test task treated the JavaExec-based `PortPipelineTest` as a source set with no discovered JUnit tests. The build configuration now disables only the empty JUnit `test` task while retaining `PortPipelineTest` as an explicit `check` dependency. Optional integrations use Maven coordinates instead of local sandbox cache paths. Local `gradle clean check build` passes with 27 tasks.

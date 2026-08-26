@@ -144,6 +144,10 @@ tasks.register("resourceHookAudit", Exec) {
 	commandLine "python3", "tools/audit_resource_hooks.py"
 }
 
+tasks.named("test") {
+		enabled = false
+}
+
 tasks.named("check") {
 	dependsOn "portPipelineTest", "visualResourceAudit", "shaderOverlayAudit", "postChainGraphAudit", "artifactParityAudit", "cleanRuntimeAudit", "cleanClientAudit", "finalMetadataAudit", "renderCallbackAudit", "sourceParityAudit", "packageCleanlinessAudit", "mixinEnvironmentAudit", "glslOutputAudit", "runtimeHardeningAudit", "runtimeCallbackAudit", "configIntegrationAudit", "remappedArtifactAudit", "resourceHookAudit"
 }

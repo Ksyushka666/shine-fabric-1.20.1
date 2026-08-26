@@ -1,0 +1,126 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.12/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Configure project :
+Fabric Loom: 1.10.2
+
+> Task :clean
+
+> Task :compileJava
+Note: /home/ubuntu/shine_port_clean/src/main/java/com/bloom/mixin/client/EntityRendererBloomSelectionMixin.java uses unchecked or unsafe operations.
+Note: Recompile with -Xlint:unchecked for details.
+
+> Task :processResources
+> Task :classes
+> Task :compileTestJava
+> Task :jar
+> Task :processIncludeJars
+
+> Task :cleanClientAudit
+clean_client_paths_checked=3
+errors=0
+
+> Task :configIntegrationAudit
+config_integration_checks=10
+errors=0
+
+> Task :glslOutputAudit
+entity_fragment_outputs=11
+particle_fragment_outputs=1
+errors=0
+
+> Task :mixinEnvironmentAudit
+client_mixins=13
+common_mixins=0
+errors=0
+
+> Task :sourcesJar
+> Task :processTestResources NO-SOURCE
+> Task :testClasses
+
+> Task :portPipelineTest
+PortPipelineTest: PASS
+
+> Task :postChainGraphAudit
+passes=8
+targets=4
+errors=0
+
+> Task :renderCallbackAudit
+render_callbacks_checked=2
+errors=0
+
+> Task :resourceHookAudit
+particle_definitions=84
+post_chain_resources=1
+world_render_hooks=2
+errors=0
+
+> Task :runtimeCallbackAudit
+runtime_callback_checks=12
+errors=0
+
+> Task :runtimeHardeningAudit
+common_sources_checked=3
+legacy_sources_archived=2
+errors=0
+
+> Task :shaderOverlayAudit
+entity_fragment_overlays=11
+entity_program_overlays=11
+particle_overlay=1
+errors=0
+
+> Task :test SKIPPED
+> Task :validateAccessWidener NO-SOURCE
+
+> Task :visualResourceAudit
+json_files=116
+asset_files=1443
+errors=0
+
+> Task :remapJar
+
+> Task :artifactParityAudit
+source_resource_count=1445
+jar_file_count=1481
+missing_resource_count=0
+required_resources=PASS
+
+> Task :cleanRuntimeAudit
+common_classes_checked=2
+errors=0
+
+> Task :finalMetadataAudit
+artifact=shine-1.0.0.jar
+expanded_version=1.0.0
+minecraft=1.20.1
+errors=0
+
+> Task :remapSourcesJar
+
+> Task :packageCleanlinessAudit
+mod_jar_clean=PASS
+jar_entries=1601
+source_jar_entries=1598
+errors=0
+
+> Task :remappedArtifactAudit
+remapped_artifact_checked=1
+source_java_count=28
+errors=0
+
+> Task :sourceParityAudit
+source_java_count=28
+source_jar_java_count=28
+missing_source_count=0
+extra_source_count=0
+
+> Task :check
+> Task :assemble
+> Task :build
+
+[Incubating] Problems report is available at: file:///home/ubuntu/shine_port_clean/build/reports/problems/problems-report.html
+
+BUILD SUCCESSFUL in 28s
+27 actionable tasks: 27 executed
