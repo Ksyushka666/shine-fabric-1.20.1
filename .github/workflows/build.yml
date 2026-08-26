@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -33,3 +33,15 @@ jobs:
             build/libs/*.jar
             PORT_STATUS.md
           if-no-files-found: error
+      - name: Publish GitHub Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="build-${GITHUB_RUN_NUMBER}"
+          gh release create "$tag" build/libs/shine-1.0.0.jar build/libs/shine-1.0.0-sources.jar \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Shine Fabric 1.20.1 build ${GITHUB_RUN_NUMBER}" \
+            --notes "Automated release created after a successful clean check build. Commit: ${GITHUB_SHA}." \
+            --latest
