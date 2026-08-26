@@ -1,1 +1,1 @@
-fa09bd8f1cb11200990a696dc3ba9123a1e2adf4c7dfc0b8ee727dd32384e5a1  build/libs/shine-fabric-1.20.1-1.0.21.jar
+e7946c4e085d7150d865bdd94d7b3268ba104024f4d733c1a5b85424f06c1fed  build/libs/shine-fabric-1.20.1-1.0.22.jar

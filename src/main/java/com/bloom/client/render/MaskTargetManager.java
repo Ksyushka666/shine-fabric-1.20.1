@@ -28,6 +28,9 @@ public final class MaskTargetManager {
     private static int width = -1;
     private static int height = -1;
     private static boolean failureLogged;
+    private static final RandomSource MASK_RANDOM = RandomSource.create(0x53484D41534BL);
+    private static long lastLowEndMaskTick = Long.MIN_VALUE;
+    private static final int[] VIEWPORT = new int[4];
 
     private MaskTargetManager() {}
 
@@ -58,12 +61,16 @@ public final class MaskTargetManager {
         if (target == null || level == null || cameraPos == null) return;
         RenderSystem.assertOnRenderThread();
         BloomConfig.Data config = BloomConfig.get();
-        int radius = (int) Math.max(4.0, Math.min(64.0, config.bloomDistance));
-        int maxBlocks = config.maskBlockBudget;
+        boolean lowEnd = isLowEndClient();
+        long gameTime = level.getGameTime();
+        // Celeron-class CPUs do not benefit from rebuilding an identical mask every render tick.
+        if (lowEnd && gameTime == lastLowEndMaskTick + 1L) return;
+        lastLowEndMaskTick = gameTime;
+        int radius = (int) Math.max(4.0, Math.min(lowEnd ? 40.0 : 64.0, config.bloomDistance));
+        int maxBlocks = lowEnd ? Math.min(config.maskBlockBudget, 64) : config.maskBlockBudget;
         int rendered = 0;
         int previousFramebuffer = GL11.glGetInteger(GL30.GL_FRAMEBUFFER_BINDING);
-        int[] viewport = new int[4];
-        GL11.glGetIntegerv(GL11.GL_VIEWPORT, viewport);
+        GL11.glGetIntegerv(GL11.GL_VIEWPORT, VIEWPORT);
         boolean depth = GL11.glIsEnabled(GL11.GL_DEPTH_TEST);
         boolean blend = GL11.glIsEnabled(GL11.GL_BLEND);
         PoseStack modelView = RenderSystem.getModelViewStack();
@@ -91,7 +98,7 @@ public final class MaskTargetManager {
                         modelView.pushPose();
                         modelView.translate(pos.getX(), pos.getY(), pos.getZ());
                         RenderSystem.applyModelViewMatrix();
-                        dispatcher.renderBatched(level.getBlockState(pos), pos, level, modelView, buffers.getBuffer(RenderType.solid()), true, RandomSource.create());
+                        dispatcher.renderBatched(level.getBlockState(pos), pos, level, modelView, buffers.getBuffer(RenderType.solid()), true, MASK_RANDOM);
                         modelView.popPose();
                         RenderSystem.applyModelViewMatrix();
                         rendered++;
@@ -106,10 +113,14 @@ public final class MaskTargetManager {
             RenderSystem.applyModelViewMatrix();
             target.unbindWrite();
             GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, previousFramebuffer);
-            GL11.glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+            GL11.glViewport(VIEWPORT[0], VIEWPORT[1], VIEWPORT[2], VIEWPORT[3]);
             if (depth) RenderSystem.enableDepthTest(); else RenderSystem.disableDepthTest();
             if (blend) RenderSystem.enableBlend(); else RenderSystem.disableBlend();
         }
+    }
+
+    private static boolean isLowEndClient() {
+        return Runtime.getRuntime().availableProcessors() <= 2;
     }
 
     public static TextureTarget getTarget() { return target; }
@@ -119,6 +130,7 @@ public final class MaskTargetManager {
         if (target != null) target.destroyBuffers();
         target = null;
         width = height = -1;
+        lastLowEndMaskTick = Long.MIN_VALUE;
     }
 
     private static void disableAfterFailure(String message, RuntimeException exception) {
