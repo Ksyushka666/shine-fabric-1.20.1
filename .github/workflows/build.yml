@@ -25,12 +25,15 @@ jobs:
         run: chmod +x gradlew
       - name: Build and verify
         run: ./gradlew clean check build --no-daemon
+      - name: Generate checksums
+        run: sha256sum build/libs/*.jar > SHA256SUMS.txt
       - name: Upload verified artifacts
         uses: actions/upload-artifact@v4
         with:
           name: shine-fabric-1.20.1-${{ github.sha }}
           path: |
             build/libs/*.jar
+            SHA256SUMS.txt
             PORT_STATUS.md
           if-no-files-found: error
       - name: Publish GitHub Release
@@ -41,7 +44,7 @@ jobs:
           version=$(grep '^mod_version=' gradle.properties | cut -d= -f2)
           artifact="shine-fabric-1.20.1-${version}"
           tag="v${version}-build-${GITHUB_RUN_NUMBER}"
-          gh release create "$tag" build/libs/${artifact}.jar build/libs/${artifact}-sources.jar \
+          gh release create "$tag" build/libs/${artifact}.jar build/libs/${artifact}-sources.jar SHA256SUMS.txt \
             --repo "$GITHUB_REPOSITORY" \
             --target "$GITHUB_SHA" \
             --title "Shine Fabric 1.20.1 ${version}" \
