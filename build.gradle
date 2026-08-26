@@ -46,15 +46,10 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-	// YACL (config screen UI)
-	modCompileOnly files('/home/ubuntu/.gradle/caches/modules-2/files-2.1/dev.isxander/yet-another-config-lib/3.6.6+1.20.1-fabric/dc5ac6c6c4d1e48e8e520b9a41b41e704e82cf55/yet-another-config-lib-3.6.6+1.20.1-fabric.jar')
-
-	// Mod Menu integration is optional for end users but enabled in dev runtime.
-	modCompileOnly files('/home/ubuntu/.gradle/caches/modules-2/files-2.1/com.terraformersmc/modmenu/7.2.2/99c68feeb74887cbbbd8ce9a27c6123804a2c5a/modmenu-7.2.2.jar')
-	// Mod Menu remains optional at runtime.
-
-	// Sodium compile stubs for optional compatibility mixins.
-	modCompileOnly files('/home/ubuntu/.gradle/caches/modules-2/files-2.1/maven.modrinth/sodium/mc1.20.1-0.5.11/c4293c1483f3b39c1c6c4c69143e8bb2c6e53daf/sodium-mc1.20.1-0.5.11.jar')
+	// Optional compile-time integrations; Maven coordinates keep CI portable.
+	modCompileOnly "dev.isxander:yet-another-config-lib:3.6.6+1.20.1-fabric"
+	modCompileOnly "com.terraformersmc:modmenu:7.2.2"
+	modCompileOnly "maven.modrinth:sodium:mc1.20.1-0.5.11"
 }
 
 processResources {

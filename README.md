@@ -47,3 +47,7 @@ ___
 Copyright © 2026 tapeQ
 
 - **You can include this mod in a modpack**, as long as it provides credit and links to the Modrinth or CurseForge page.
+
+## Continuous integration
+
+Every push, pull request, or manual workflow dispatch runs `./gradlew clean check build` on Java 17. The workflow uploads the verified mod and sources JARs only when the build succeeds. Optional YACL, Mod Menu, and Sodium integrations resolve from Maven coordinates, so the build does not depend on a local developer cache.
