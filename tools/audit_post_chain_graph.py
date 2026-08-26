@@ -13,6 +13,7 @@ for index, p in enumerate(chain.get("passes", [])):
     fragment = p.get("fragment_shader", "")
     if not fragment:
         program = p.get("name", "")
+        if ":" in program: program = program.split(":", 1)[1]
         program_json = RESOURCE / "shine" / "shaders" / "program" / (program + ".json")
         if program_json.is_file():
             fragment = json.loads(program_json.read_text()).get("fragment", program)

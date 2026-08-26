@@ -2,7 +2,7 @@
   "targets": [ "source", "bloom_extract", "bloom_ping" ],
   "passes": [
     {
-      "name": "bloom_extract",
+      "name": "shine:bloom_extract",
       "intarget": "source",
       "outtarget": "bloom_extract",
       "auxtargets": [ { "name": "DepthSampler", "id": "minecraft:main" } ],
@@ -18,19 +18,19 @@
       ]
     },
     {
-      "name": "bloom_blur_horizontal",
+      "name": "shine:bloom_blur_horizontal",
       "intarget": "bloom_extract",
       "outtarget": "bloom_ping",
       "uniforms": [ { "name": "BlurDir", "values": [ 1.0, 0.0 ] }, { "name": "Radius", "values": [ 4.0 ] } ]
     },
     {
-      "name": "bloom_blur_vertical",
+      "name": "shine:bloom_blur_vertical",
       "intarget": "bloom_ping",
       "outtarget": "bloom_extract",
       "uniforms": [ { "name": "BlurDir", "values": [ 0.0, 1.0 ] }, { "name": "Radius", "values": [ 4.0 ] } ]
     },
     {
-      "name": "bloom_composite",
+      "name": "shine:bloom_composite",
       "intarget": "minecraft:main",
       "outtarget": "minecraft:main",
       "auxtargets": [
