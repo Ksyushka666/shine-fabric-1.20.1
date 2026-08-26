@@ -19,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public final class BloomConfig {
 public static final int MAX_BLUR_PASSES = 4;
+		public static final int MAX_MASK_BLOCK_BUDGET = 512;
 		public static final double MAX_STRENGTH = 10.0;
 		public static final double LEGACY_MAX_RADIUS = 500.0;
 		public static final double MAX_RADIUS = 700.0;
@@ -108,7 +109,9 @@ public static final int MAX_BLUR_PASSES = 4;
 			safe.tinyRadius = clamp(safe.tinyRadius, 0.0, MAX_RADIUS);
 			safe.broadRadius = clamp(safe.broadRadius, 0.0, MAX_RADIUS);
 			safe.radiusScaleVersion = RADIUS_SCALE_VERSION;
-			safe.blurPassCount = (int) clamp(safe.blurPassCount, 1, MAX_BLUR_PASSES);
+							safe.blurPassCount = (int) clamp(safe.blurPassCount, 1, MAX_BLUR_PASSES);
+				safe.maskBlockBudget = (int) clamp(safe.maskBlockBudget, 16, MAX_MASK_BLOCK_BUDGET);
+
 		if (safe.bloomDistance <= 0.0) {
 			// Older config files won't contain this field yet; keep them on a sensible default.
 			safe.bloomDistance = Data.defaults().bloomDistance;
@@ -180,6 +183,8 @@ public static final int MAX_BLUR_PASSES = 4;
 			public double broadRadius = 700.0;
 			public int radiusScaleVersion = RADIUS_SCALE_VERSION;
 			public int blurPassCount = 2;
+			public boolean selectiveMaskEnabled = true;
+			public int maskBlockBudget = 128;
 			public double bloomDistance = 256.0;
 			public double highlightClamp = 0.28;
 		public double softKnee = 0.2;
@@ -262,7 +267,9 @@ public static final int MAX_BLUR_PASSES = 4;
 				copy.broadRadius = this.broadRadius;
 				copy.radiusScaleVersion = this.radiusScaleVersion;
 				copy.blurPassCount = this.blurPassCount;
-			copy.bloomDistance = this.bloomDistance;
+				copy.selectiveMaskEnabled = this.selectiveMaskEnabled;
+				copy.maskBlockBudget = this.maskBlockBudget;
+				copy.bloomDistance = this.bloomDistance;
 			copy.highlightClamp = this.highlightClamp;
 			copy.softKnee = this.softKnee;
 			copy.defaultLightSourceStrength = this.defaultLightSourceStrength;

@@ -39,6 +39,7 @@ public final class BloomPostProcessor {
     public static void onConfigSaved() {
         closeRuntimeChain();
         BloomSourceRenderer.reset();
+        MaskTargetManager.close();
         chainFailureLogged = false;
         uniformBindingWarningLogged = false;
     }
@@ -47,6 +48,7 @@ public final class BloomPostProcessor {
     public static void shutdown() {
         closeRuntimeChain();
         BloomSourceRenderer.reset();
+        MaskTargetManager.close();
         irisDisabled = false;
         uniformBindingWarningLogged = false;
         chainFailureLogged = false;
@@ -72,13 +74,22 @@ public final class BloomPostProcessor {
 
         RenderTarget chainSource = chain.getTempTarget("source");
         RenderTarget chainScene = chain.getTempTarget("scene");
+        RenderTarget chainMask = chain.getTempTarget("mask");
         int[] previousViewport = new int[4];
         GL11.glGetIntegerv(GL11.GL_VIEWPORT, previousViewport);
         boolean previousBlend = GL11.glIsEnabled(GL11.GL_BLEND);
         boolean previousDepth = GL11.glIsEnabled(GL11.GL_DEPTH_TEST);
         try {
-            if (chainSource != null) copyTarget(main, chainSource);
             if (chainScene != null) copyTarget(main, chainScene);
+            if (chainSource != null) copyTarget(main, chainSource);
+            if (config.selectiveMaskEnabled) {
+                MaskTargetManager.prepare(main);
+                if (minecraft.getCameraEntity() != null) {
+                    var camera = minecraft.getCameraEntity();
+                    MaskTargetManager.renderBlocks(minecraft.level, camera.blockPosition(), camera.getX(), camera.getY(), camera.getZ());
+                }
+                if (chainMask != null && MaskTargetManager.getTarget() != null) copyTarget(MaskTargetManager.getTarget(), chainMask);
+            }
             applyConfigUniforms(chain, config);
             chain.process(0.0F);
         } catch (RuntimeException exception) {
@@ -153,6 +164,7 @@ public final class BloomPostProcessor {
             setUniform(effect, "SourceStrengthScale", (float) Math.max(0.0, config.defaultLightSourceStrength / BloomConfig.MAX_SOURCE_STRENGTH));
             setUniform(effect, "HighlightClamp", (float) config.highlightClamp);
             setUniform(effect, "SoftKnee", (float) config.softKnee);
+            setUniform(effect, "SelectiveMask", config.selectiveMaskEnabled ? 1.0F : 0.0F);
             setUniform(effect, "MaxDistance", (float) config.bloomDistance);
             setUniform(effect, "DistanceFadeRange", (float) Math.max(1.0, config.bloomDistance * 0.25));
             if (effectName.endsWith("bloom_blur_horizontal") || effectName.endsWith("bloom_blur_vertical")) {

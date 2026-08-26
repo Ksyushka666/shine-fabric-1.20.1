@@ -1,6 +1,7 @@
 #version 150
 
 uniform sampler2D DiffuseSampler;
+uniform sampler2D MaskSampler;
 uniform sampler2D HalfSampler;
 uniform sampler2D QuarterSampler;
 uniform sampler2D EighthSampler;
@@ -18,6 +19,7 @@ uniform vec2 ThirtysecondSize;
 uniform vec2 SixtyfourthSize;
 
 uniform float Strength;
+uniform float SelectiveMask;
 
 uniform float Weight0;
 uniform float Weight1;
@@ -48,6 +50,7 @@ void main() {
     bloomColor += centered_sample(SixteenthSampler, uv, SixteenthSize) * Weight3;
     bloomColor += centered_sample(ThirtysecondSampler, uv, ThirtysecondSize) * Weight4;
     bloomColor += centered_sample(SixtyfourthSampler, uv, SixtyfourthSize) * Weight5;
-    bloomColor *= Strength * distanceMask;
+    float selectiveMask = SelectiveMask > 0.5 ? clamp(texture(MaskSampler, uv).r, 0.0, 1.0) : 1.0;
+    bloomColor *= Strength * distanceMask * selectiveMask;
     fragColor = vec4(sceneColor.rgb + bloomColor, sceneColor.a);
 }

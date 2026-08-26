@@ -26,9 +26,9 @@ if not sources.is_file(): errors.append("sources JAR missing")
 else:
     with zipfile.ZipFile(sources) as z:
         java_count = sum(name.endswith(".java") for name in z.namelist())
-        if java_count != 28: errors.append(f"source count mismatch: {java_count}")
+        if java_count != 29: errors.append(f"source count mismatch: {java_count}")
 print("remapped_artifact_checked=1")
-print("source_java_count=28")
+print("source_java_count=29")
 print(f"errors={len(errors)}")
 for error in errors: print(error)
 if errors: raise SystemExit(1)

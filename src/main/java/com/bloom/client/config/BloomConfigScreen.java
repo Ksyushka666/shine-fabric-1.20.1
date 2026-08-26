@@ -38,8 +38,9 @@ public final class BloomConfigScreen {
 		ConfigCategory mainCategory = ConfigCategory.createBuilder()
 			.name(Component.translatable("shine.config.category.main"))
 			.group(bloom$buildOverridesInUseGroup(defaults, editing, blockEntryById))
-			.group(bloom$buildGlobalSettingsGroup(defaults, editing))
-			.build();
+				.group(bloom$buildGlobalSettingsGroup(defaults, editing))
+				.group(bloom$buildSelectiveMaskGroup(defaults, editing))
+				.build();
 
 		ConfigCategory addOverridesCategory = ConfigCategory.createBuilder()
 			.name(Component.translatable("shine.config.category.unused_blocks"))
@@ -207,7 +208,26 @@ public final class BloomConfigScreen {
 			.build();
 	}
 
-	private static OptionGroup bloom$buildUnusedBlocksGroup(BloomConfig.Data defaults, BloomConfig.Data editing, List<BlockEntry> blockEntries) {
+			private static OptionGroup bloom$buildSelectiveMaskGroup(BloomConfig.Data defaults, BloomConfig.Data editing) {
+			return OptionGroup.createBuilder()
+				.name(Component.translatable("shine.config.group.selective_mask"))
+				.description(OptionDescription.of(Component.translatable("shine.config.group.selective_mask.desc")))
+				.option(Option.<Boolean>createBuilder()
+					.name(Component.translatable("shine.config.selective_mask_enabled"))
+					.description(OptionDescription.of(Component.translatable("shine.config.selective_mask_enabled.desc")))
+					.binding(Binding.generic(defaults.selectiveMaskEnabled, () -> editing.selectiveMaskEnabled, value -> editing.selectiveMaskEnabled = value))
+					.controller(option -> BooleanControllerBuilder.create(option).yesNoFormatter())
+					.build())
+				.option(Option.<Integer>createBuilder()
+					.name(Component.translatable("shine.config.mask_block_budget"))
+					.description(OptionDescription.of(Component.translatable("shine.config.mask_block_budget.desc")))
+					.binding(Binding.generic(defaults.maskBlockBudget, () -> editing.maskBlockBudget, value -> editing.maskBlockBudget = value))
+					.controller(option -> IntegerSliderControllerBuilder.create(option).range(16, BloomConfig.MAX_MASK_BLOCK_BUDGET).step(16))
+					.build())
+				.build();
+		}
+
+		private static OptionGroup bloom$buildUnusedBlocksGroup(BloomConfig.Data defaults, BloomConfig.Data editing, List<BlockEntry> blockEntries) {
 		OptionGroup.Builder builder = OptionGroup.createBuilder()
 			.name(Component.translatable("shine.config.group.unused_blocks"))
 			.description(OptionDescription.of(Component.translatable("shine.config.group.unused_blocks.desc")))

@@ -1,5 +1,5 @@
 {
-  "targets": [ "source", "scene", "bloom_extract", "bloom_ping" ],
+  "targets": [ "source", "scene", "mask", "bloom_extract", "bloom_ping" ],
   "passes": [
     {
       "name": "shine_bloom_extract",
@@ -29,6 +29,7 @@
       "intarget": "scene",
       "outtarget": "minecraft:main",
       "auxtargets": [
+        { "name": "MaskSampler", "id": "mask" },
         { "name": "HalfSampler", "id": "bloom_extract" },
         { "name": "QuarterSampler", "id": "bloom_extract" },
         { "name": "EighthSampler", "id": "bloom_extract" },
@@ -38,6 +39,7 @@
       ],
       "uniforms": [
         { "name": "Strength", "values": [ 0.85 ] },
+        { "name": "SelectiveMask", "values": [ 1.0 ] },
         { "name": "Weight0", "values": [ 1.0 ] },
         { "name": "Weight1", "values": [ 0.0 ] },
         { "name": "Weight2", "values": [ 0.0 ] },

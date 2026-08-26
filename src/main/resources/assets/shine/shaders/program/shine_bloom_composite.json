@@ -5,6 +5,7 @@
   "attributes": [ "Position" ],
   "samplers": [
     { "name": "DiffuseSampler" },
+    { "name": "MaskSampler" },
     { "name": "HalfSampler" },
     { "name": "QuarterSampler" },
     { "name": "EighthSampler" },
@@ -22,6 +23,7 @@
     { "name": "ThirtysecondSize", "type": "float", "count": 2, "values": [ 1.0, 1.0 ] },
     { "name": "SixtyfourthSize", "type": "float", "count": 2, "values": [ 1.0, 1.0 ] },
     { "name": "Strength", "type": "float", "count": 1, "values": [ 0.85 ] },
+    { "name": "SelectiveMask", "type": "float", "count": 1, "values": [ 1.0 ] },
     { "name": "Weight0", "type": "float", "count": 1, "values": [ 1.0 ] },
     { "name": "Weight1", "type": "float", "count": 1, "values": [ 0.0 ] },
     { "name": "Weight2", "type": "float", "count": 1, "values": [ 0.0 ] },

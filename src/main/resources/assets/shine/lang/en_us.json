@@ -54,5 +54,12 @@
 	"shine.config.blur_pass_count": "Blur Passes",
 	"shine.config.blur_pass_count.desc": "Controls how many bloom pyramid levels are active. Higher values cost more but produce a broader glow.",
 	"shine.config.distance": "Bloom Distance",
-	"shine.config.distance.desc": "Live camera radius for bloom. Lower values cut off bloom on distant pixels."
+			"shine.config.distance.desc": "Live camera radius for bloom. Lower values cut off bloom on distant pixels.",
+		"shine.config.group.selective_mask": "Selective Bloom Mask",
+		"shine.config.group.selective_mask.desc": "Renders only configured emissive blocks into a private mask target; Sodium and Iris framebuffers are never modified.",
+		"shine.config.selective_mask_enabled": "Enable Selective Mask",
+		"shine.config.selective_mask_enabled.desc": "Use the private per-block mask instead of applying bloom to every bright pixel in the scene.",
+		"shine.config.mask_block_budget": "Visible Block Budget",
+		"shine.config.mask_block_budget.desc": "Maximum number of selected blocks rendered into the mask each frame. Lower values reduce CPU/GPU cost on low-end systems."
+
 }
