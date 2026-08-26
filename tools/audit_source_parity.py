@@ -3,7 +3,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-JAR = ROOT / "build/libs/shine-1.0.0-sources.jar"
+JAR = next((ROOT / "build/libs").glob("*-sources.jar"))
 source_set = {p.relative_to(ROOT / "src/main/java").as_posix() for p in (ROOT / "src/main/java").rglob("*.java")}
 with zipfile.ZipFile(JAR) as archive:
     jar_set = {n for n in archive.namelist() if n.endswith(".java")}

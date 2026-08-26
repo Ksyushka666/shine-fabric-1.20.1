@@ -4,8 +4,10 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-jar = ROOT / "build/libs/shine-1.0.0.jar"
-sources = ROOT / "build/libs/shine-1.0.0-sources.jar"
+props = (ROOT / "gradle.properties").read_text()
+expected_version = next(line.split("=", 1)[1].strip() for line in props.splitlines() if line.startswith("mod_version="))
+jar = next(p for p in (ROOT / "build/libs").glob("*.jar") if not p.name.endswith("-sources.jar"))
+sources = next((ROOT / "build/libs").glob("*-sources.jar"))
 errors = []
 if not jar.is_file(): errors.append("remapped JAR missing")
 else:
@@ -13,7 +15,7 @@ else:
         names = set(z.namelist())
         try: metadata = json.loads(z.read("fabric.mod.json"))
         except Exception as e: errors.append(f"fabric.mod.json unreadable: {e}"); metadata = {}
-        if metadata.get("version") != "1.0.0": errors.append("expanded artifact version mismatch")
+        if metadata.get("version") != expected_version: errors.append(f"expanded artifact version mismatch: {metadata.get('version')} != {expected_version}")
         if metadata.get("environment") != "*": errors.append("artifact environment mismatch")
         for forbidden in ("build.gradle", "PORT_STATUS.md"):
             if forbidden in names: errors.append(f"forbidden artifact entry: {forbidden}")

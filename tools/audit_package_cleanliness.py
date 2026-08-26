@@ -4,8 +4,8 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-JAR = ROOT / "build/libs/shine-1.0.0.jar"
-SOURCES = ROOT / "build/libs/shine-1.0.0-sources.jar"
+JAR = next(p for p in (ROOT / "build/libs").glob("*.jar") if not p.name.endswith("-sources.jar"))
+SOURCES = next((ROOT / "build/libs").glob("*-sources.jar"))
 errors = []
 for path, forbidden in ((JAR, (".java", ".log", ".tmp", "audit", "PortPipelineTest")), (SOURCES, (".log", ".tmp", "audit"))):
     with zipfile.ZipFile(path) as archive:

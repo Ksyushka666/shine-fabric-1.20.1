@@ -4,7 +4,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-JAR = ROOT / "build/libs/shine-1.0.0.jar"
+JAR = next(p for p in (ROOT / "build/libs").glob("*.jar") if not p.name.endswith("-sources.jar"))
 errors = []
 with zipfile.ZipFile(JAR) as archive:
     metadata = json.loads(archive.read("fabric.mod.json"))

@@ -1,0 +1,76 @@
+--- gradle properties ---
+# Done to increase the memory available to gradle.
+org.gradle.jvmargs=-Xmx1G
+org.gradle.parallel=true
+
+# IntelliJ IDEA is not yet fully compatible with configuration cache, see: https://github.com/FabricMC/fabric-loom/issues/1349
+org.gradle.configuration-cache=false
+
+# Fabric Properties
+# check these on https://fabricmc.net/develop
+minecraft_version=1.20.1
+loader_version=0.14.22
+loom_version=1.4-SNAPSHOT
+
+# Mod Properties
+mod_version=1.0.0
+maven_group=com.shine
+archives_base_name=shine
+
+# Dependencies
+fabric_version=0.92.2+1.20.1
+modmenu_version=7.2.2
+yacl_version=3.6.6+1.20.1-fabric
+--- metadata version references ---
+gradle.properties:15:mod_version=1.0.0
+src/main/resources/fabric.mod.json:11:	"license": "PolyForm Shield License 1.0.0",
+.github/workflows/build.yml:41:          tag="build-${GITHUB_RUN_NUMBER}"
+.github/workflows/build.yml:42:          gh release create "$tag" build/libs/shine-1.0.0.jar build/libs/shine-1.0.0-sources.jar \
+--- workflow ---
+name: Build Shine
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up Java 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+      - name: Make Gradle executable
+        run: chmod +x gradlew
+      - name: Build and verify
+        run: ./gradlew clean check build --no-daemon
+      - name: Upload verified artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: shine-fabric-1.20.1-${{ github.sha }}
+          path: |
+            build/libs/*.jar
+            PORT_STATUS.md
+          if-no-files-found: error
+      - name: Publish GitHub Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="build-${GITHUB_RUN_NUMBER}"
+          gh release create "$tag" build/libs/shine-1.0.0.jar build/libs/shine-1.0.0-sources.jar \
+            --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" \
+            --title "Shine Fabric 1.20.1 build ${GITHUB_RUN_NUMBER}" \
+            --notes "Automated release created after a successful clean check build. Commit: ${GITHUB_SHA}." \
+            --latest

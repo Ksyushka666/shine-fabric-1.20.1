@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 cd "$(dirname "$0")/.."
-JAR="build/libs/shine-1.0.0.jar"
+JAR=$(find build/libs -maxdepth 1 -type f -name "*.jar" ! -name "*-sources.jar" -print -quit)
 TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT
 jar tf "$JAR" | sed '/\/$/d' | sort > "$TMP/jar.list"
