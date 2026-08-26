@@ -1,6 +1,9 @@
 package com.bloom.client.config;
 
 import com.bloom.BloomMod;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import com.bloom.client.render.BloomPostProcessor;
 import dev.isxander.yacl3.api.Binding;
 import dev.isxander.yacl3.api.ButtonOption;
@@ -33,7 +36,9 @@ public final class BloomConfigScreen {
 		BloomConfig.Data editing = BloomConfig.copy();
 
 		List<BlockEntry> blockEntries = bloom$getBlockEntries();
-		Map<String, BlockEntry> blockEntryById = blockEntries.stream().collect(java.util.stream.Collectors.toMap(BlockEntry::id, entry -> entry));
+			Map<String, BlockEntry> blockEntryById = blockEntries.stream().collect(java.util.stream.Collectors.toMap(BlockEntry::id, entry -> entry));
+			JsonObject experimentalDefaults = ExperimentalConfigManager.snapshot();
+			JsonObject experimentalEditing = experimentalDefaults.deepCopy();
 
 		ConfigCategory mainCategory = ConfigCategory.createBuilder()
 			.name(Component.translatable("shine.config.category.main"))
@@ -50,12 +55,16 @@ public final class BloomConfigScreen {
 		return YetAnotherConfigLib.createBuilder()
 			.title(Component.translatable("shine.config.title"))
 			.category(mainCategory)
-			.category(addOverridesCategory)
-			.save(() -> {
+							.category(addOverridesCategory)
+				.category(bloom$buildExperimentalCategory(experimentalDefaults, experimentalEditing))
+				.save(() -> {
+
 				bloom$pruneInactiveOverrides(defaults, editing, blockEntryById);
 				BloomConfig.set(editing);
-				BloomConfig.save();
-				BloomPostProcessor.onConfigSaved();
+									BloomConfig.save();
+					ExperimentalConfigManager.save(experimentalEditing);
+					BloomPostProcessor.onConfigSaved();
+
 				bloom$rebuildChunksForSourceStrengthChanges();
 			})
 			.build()
@@ -225,6 +234,75 @@ public final class BloomConfigScreen {
 					.controller(option -> IntegerSliderControllerBuilder.create(option).range(16, BloomConfig.MAX_MASK_BLOCK_BUDGET).step(16))
 					.build())
 				.build();
+		}
+
+		private static ConfigCategory bloom$buildExperimentalCategory(JsonObject defaults, JsonObject editing) {
+			ConfigCategory.Builder category = ConfigCategory.createBuilder()
+				.name(Component.translatable("shine.config.category.experimental"));
+			for (Map.Entry<String, JsonElement> entry : defaults.entrySet()) {
+				if (!entry.getValue().isJsonObject()) continue;
+				OptionGroup.Builder group = OptionGroup.createBuilder()
+					.name(Component.literal(bloom$humanize(entry.getKey())))
+					.description(OptionDescription.of(Component.translatable("shine.config.experimental.desc")));
+				List<String> paths = new ArrayList<>();
+				bloom$collectEditableLeaves(entry.getValue().getAsJsonObject(), entry.getKey(), paths);
+				for (String path : paths) {
+					JsonElement value = bloom$getPath(defaults, path);
+					if (value == null || !value.isJsonPrimitive()) continue;
+					JsonPrimitive primitive = value.getAsJsonPrimitive();
+					if (primitive.isBoolean()) {
+						group.option(Option.<Boolean>createBuilder()
+							.name(Component.literal(bloom$humanize(path.substring(path.lastIndexOf('.') + 1))))
+							.binding(Binding.generic(primitive.getAsBoolean(),
+								() -> bloom$getPath(editing, path).getAsBoolean(),
+								v -> bloom$setPath(editing, path, new JsonPrimitive(v))))
+							.controller(option -> BooleanControllerBuilder.create(option).yesNoFormatter())
+							.build());
+					} else if (primitive.isNumber()) {
+						group.option(Option.<Double>createBuilder()
+							.name(Component.literal(bloom$humanize(path.substring(path.lastIndexOf('.') + 1))))
+							.binding(Binding.generic(primitive.getAsDouble(),
+								() -> bloom$getPath(editing, path).getAsDouble(),
+								v -> bloom$setPath(editing, path, new JsonPrimitive(v))))
+							.controller(option -> DoubleSliderControllerBuilder.create(option).range(-10000.0, 10000.0).step(0.01)
+								.formatValue(v -> Component.literal(String.format(Locale.ROOT, "%.2f", v))))
+							.build());
+					}
+				}
+				category.group(group.build());
+			}
+			return category.build();
+		}
+
+		private static void bloom$collectEditableLeaves(JsonObject object, String prefix, List<String> output) {
+			for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+				String path = prefix + "." + entry.getKey();
+				if (entry.getValue().isJsonObject()) bloom$collectEditableLeaves(entry.getValue().getAsJsonObject(), path, output);
+				else if (entry.getValue().isJsonPrimitive() && output.size() < 512) output.add(path);
+			}
+		}
+
+		private static JsonElement bloom$getPath(JsonObject root, String path) {
+			JsonElement current = root;
+			for (String part : path.split("\\.")) {
+				if (!current.isJsonObject() || !current.getAsJsonObject().has(part)) return new JsonPrimitive(0.0);
+				current = current.getAsJsonObject().get(part);
+			}
+			return current;
+		}
+
+		private static void bloom$setPath(JsonObject root, String path, JsonElement value) {
+			String[] parts = path.split("\\.");
+			JsonObject current = root;
+			for (int i = 0; i < parts.length - 1; i++) {
+				if (!current.has(parts[i]) || !current.get(parts[i]).isJsonObject()) current.add(parts[i], new JsonObject());
+				current = current.getAsJsonObject(parts[i]);
+			}
+			current.add(parts[parts.length - 1], value);
+		}
+
+		private static String bloom$humanize(String value) {
+			return value.replace('_', ' ').replace('-', ' ');
 		}
 
 		private static OptionGroup bloom$buildUnusedBlocksGroup(BloomConfig.Data defaults, BloomConfig.Data editing, List<BlockEntry> blockEntries) {

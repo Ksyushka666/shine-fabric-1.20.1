@@ -63,6 +63,21 @@ public final class ExperimentalConfigManager {
         return state.deepCopy();
     }
 
+    public static synchronized void save(JsonObject snapshot) {
+        load();
+        if (snapshot == null) return;
+        state = snapshot.deepCopy();
+        Path file = Minecraft.getInstance().gameDirectory.toPath().resolve("config/shine/experimental.json");
+        try {
+            Files.createDirectories(file.getParent());
+            try (Writer writer = Files.newBufferedWriter(file, StandardCharsets.UTF_8)) {
+                GSON.toJson(state, writer);
+            }
+        } catch (Exception exception) {
+            BloomMod.LOGGER.warn("Unable to save Shine experimental config", exception);
+        }
+    }
+
     private static JsonObject readBundledDefaults() {
         try (Reader reader = new java.io.InputStreamReader(
                 ExperimentalConfigManager.class.getResourceAsStream(DEFAULT_RESOURCE), StandardCharsets.UTF_8)) {

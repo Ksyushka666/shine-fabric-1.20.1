@@ -60,6 +60,8 @@
 		"shine.config.selective_mask_enabled": "Enable Selective Mask",
 		"shine.config.selective_mask_enabled.desc": "Use the private per-block mask instead of applying bloom to every bright pixel in the scene.",
 		"shine.config.mask_block_budget": "Visible Block Budget",
-		"shine.config.mask_block_budget.desc": "Maximum number of selected blocks rendered into the mask each frame. Lower values reduce CPU/GPU cost on low-end systems."
+		"shine.config.mask_block_budget.desc": "Maximum number of selected blocks rendered into the mask each frame. Lower values reduce CPU/GPU cost on low-end systems.",
+		"shine.config.category.experimental": "Shine 3.0 Experimental",
+		"shine.config.experimental.desc": "JSON-backed experimental Shine 3.0 setting. Changes are isolated from the stable render pipeline and saved to config/shine/experimental.json."
 
 }
