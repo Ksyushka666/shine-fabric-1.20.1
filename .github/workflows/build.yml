@@ -6,6 +6,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+concurrency:
+  group: shine-build-${{ github.ref }}
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -23,6 +27,20 @@ jobs:
           cache: gradle
       - name: Make Gradle executable
         run: chmod +x gradlew
+      - name: Select and bump patch version
+        shell: bash
+        run: |
+          current=$(grep '^mod_version=' gradle.properties | cut -d= -f2)
+          if [[ "$GITHUB_EVENT_NAME" == "push" && "$GITHUB_REF" == "refs/heads/master" ]]; then
+            IFS=. read -r major minor patch <<< "$current"
+            next="${major}.${minor}.$((patch + 1))"
+            sed -i "s/^mod_version=.*/mod_version=${next}/" gradle.properties
+            version="$next"
+          else
+            version="$current"
+          fi
+          echo "MOD_VERSION=${version}" >> "$GITHUB_ENV"
+          echo "Building Shine version ${version}"
       - name: Build and verify
         run: ./gradlew clean check build --no-daemon
       - name: Generate checksums
@@ -30,7 +48,7 @@ jobs:
       - name: Upload verified artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: shine-fabric-1.20.1-${{ github.sha }}
+          name: shine-fabric-1.20.1-${{ env.MOD_VERSION }}-${{ github.sha }}
           path: |
             build/libs/*.jar
             SHA256SUMS.txt
@@ -41,12 +59,21 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          version=$(grep '^mod_version=' gradle.properties | cut -d= -f2)
-          artifact="shine-fabric-1.20.1-${version}"
-          tag="v${version}-build-${GITHUB_RUN_NUMBER}"
+          artifact="shine-fabric-1.20.1-${MOD_VERSION}"
+          tag="v${MOD_VERSION}-build-${GITHUB_RUN_NUMBER}"
           gh release create "$tag" build/libs/${artifact}.jar build/libs/${artifact}-sources.jar SHA256SUMS.txt \
             --repo "$GITHUB_REPOSITORY" \
             --target "$GITHUB_SHA" \
-            --title "Shine Fabric 1.20.1 ${version}" \
+            --title "Shine Fabric 1.20.1 ${MOD_VERSION}" \
             --notes "Automated release created after a successful clean check build. Commit: ${GITHUB_SHA}." \
             --latest
+      - name: Commit next version
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        env:
+          MOD_VERSION: ${{ env.MOD_VERSION }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add gradle.properties
+          git commit -m "chore: bump mod version to ${MOD_VERSION} [skip ci]"
+          git push origin HEAD:master
