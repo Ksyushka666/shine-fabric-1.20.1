@@ -17,7 +17,7 @@ if [ "$missing_count" -ne 0 ]; then
   cat "$TMP/missing.list"
   exit 1
 fi
-for required in fabric.mod.json shine.mixins.json assets/shine/post_effect/bloom_poc.json assets/shine/defaults/shine.json assets/shine/defaults/experimental.json assets/minecraft/shaders/core/terrain.fsh assets/minecraft/shaders/core/particle.fsh; do
+for required in fabric.mod.json shine.mixins.json assets/shine/shaders/post/bloom_poc.json assets/shine/defaults/shine.json assets/shine/defaults/experimental.json assets/minecraft/shaders/core/terrain.fsh assets/minecraft/shaders/core/particle.fsh; do
   grep -Fxq "$required" "$TMP/jar.list" || { echo "MISSING $required"; exit 1; }
 done
 echo "required_resources=PASS"

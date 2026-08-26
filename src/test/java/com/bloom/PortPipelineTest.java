@@ -35,9 +35,9 @@ public final class PortPipelineTest {
     }
 
     private static void testJsonAndShaderFilesExist() throws Exception {
-        require(Files.isRegularFile(RESOURCES.resolve("assets/shine/post_effect/bloom_poc.json")), "missing bloom PostChain JSON");
+        require(Files.isRegularFile(RESOURCES.resolve("assets/shine/shaders/post/bloom_poc.json")), "missing bloom PostChain JSON");
         require(Files.isRegularFile(RESOURCES.resolve("assets/shine/shaders/post/bloom_extract.fsh")), "missing extraction shader");
-        require(Files.isRegularFile(RESOURCES.resolve("assets/shine/shaders/post/fast_blur.fsh")), "missing blur shader");
+        require(Files.isRegularFile(RESOURCES.resolve("assets/shine/shaders/post/bloom_blur_horizontal.fsh")), "missing blur shader");
         require(Files.isRegularFile(RESOURCES.resolve("assets/shine/shaders/post/bloom_composite.fsh")), "missing composite shader");
         require(Files.isRegularFile(RESOURCES.resolve("assets/shine/defaults/experimental.json")), "missing experimental baseline");
         require(Files.isRegularFile(JAVA.resolve("com/bloom/client/config/ExperimentalConfigManager.java")), "missing experimental config manager");
@@ -53,7 +53,7 @@ public final class PortPipelineTest {
     }
 
     private static void testPostChainBindings() throws Exception {
-        String json = Files.readString(RESOURCES.resolve("assets/shine/post_effect/bloom_poc.json"));
+        String json = Files.readString(RESOURCES.resolve("assets/shine/shaders/post/bloom_poc.json"));
         for (String sampler : new String[] {"DepthSampler", "SourceSampler", "InSampler", "MainSampler", "HalfSampler"}) {
             require(json.contains("\"sampler_name\": \"" + sampler + "\""), "missing sampler binding: " + sampler);
         }
@@ -70,7 +70,7 @@ public final class PortPipelineTest {
     private static void testDynamicUniformBinding() throws Exception {
         String processor = Files.readString(JAVA.resolve("com/bloom/client/render/BloomPostProcessor.java"));
         String accessor = Files.readString(JAVA.resolve("com/bloom/mixin/client/accessor/PostChainAccessor.java"));
-        String blur = Files.readString(RESOURCES.resolve("assets/shine/shaders/post/fast_blur.fsh"));
+        String blur = Files.readString(RESOURCES.resolve("assets/shine/shaders/post/bloom_blur_horizontal.fsh"));
         require(processor.contains("applyConfigUniforms(chain, config)"), "BloomConfig is not applied before PostChain processing");
         for (String uniform : new String[] {"Threshold", "Strength", "MaxDistance", "DistanceFadeRange", "Radius"}) {
             require(processor.contains("\"" + uniform + "\""), "dynamic bloom uniform binding missing: " + uniform);
@@ -78,14 +78,14 @@ public final class PortPipelineTest {
         require(accessor.contains("@Accessor(\"passes\")") && accessor.contains("shine$getPasses"), "1.20.1 PostChain passes accessor missing");
         require(processor.contains("config.tinyRadius") && processor.contains("config.radius") && processor.contains("config.broadRadius"), "bloom radius profile mapping missing");
         require(processor.contains("activeBlurPasses") && processor.contains("config.blurPassCount"), "blurPassCount mapping missing");
-        require(blur.contains("sampleCount = 6.0") && blur.contains("actualRadius * (i / sampleCount)"), "bounded blur sampling implementation missing");
+        require(blur.contains("uniform float Radius") && blur.contains("sampleCount = 6.0") && blur.contains("actualRadius") && blur.contains("for (int i = 1; i <= 6; ++i)"), "bounded blur sampling implementation missing");
         require(processor.contains("instanceof PostChainAccessor accessor"), "PostChain accessor fallback missing");
         require(processor.contains("if (effect == null) continue"), "null PostPass effect guard missing");
     }
 
     private static void testShaderUniforms() throws Exception {
         String extract = Files.readString(RESOURCES.resolve("assets/shine/shaders/post/bloom_extract.fsh"));
-        String blur = Files.readString(RESOURCES.resolve("assets/shine/shaders/post/fast_blur.fsh"));
+        String blur = Files.readString(RESOURCES.resolve("assets/shine/shaders/post/bloom_blur_horizontal.fsh"));
         String composite = Files.readString(RESOURCES.resolve("assets/shine/shaders/post/bloom_composite.fsh"));
         String terrain = Files.readString(RESOURCES.resolve("assets/minecraft/shaders/core/terrain.fsh"));
         require(extract.contains("uniform sampler2D DepthSampler") && extract.contains("uniform sampler2D SourceSampler"), "extract sampler uniforms mismatch");

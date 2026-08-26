@@ -66,7 +66,7 @@
     },
     {
       "vertex_shader": "minecraft:core/screenquad",
-      "fragment_shader": "shine:post/fast_blur",
+      "fragment_shader": "shine:post/bloom_blur_horizontal",
       "inputs": [
         {
           "sampler_name": "InSampler",
@@ -93,7 +93,7 @@
     },
     {
       "vertex_shader": "minecraft:core/screenquad",
-      "fragment_shader": "shine:post/fast_blur",
+      "fragment_shader": "shine:post/bloom_blur_vertical",
       "inputs": [
         {
           "sampler_name": "InSampler",
@@ -120,7 +120,7 @@
     },
     {
       "vertex_shader": "minecraft:core/screenquad",
-      "fragment_shader": "shine:post/fast_blur",
+      "fragment_shader": "shine:post/bloom_blur_horizontal",
       "inputs": [
         {
           "sampler_name": "InSampler",
@@ -147,7 +147,7 @@
     },
     {
       "vertex_shader": "minecraft:core/screenquad",
-      "fragment_shader": "shine:post/fast_blur",
+      "fragment_shader": "shine:post/bloom_blur_vertical",
       "inputs": [
         {
           "sampler_name": "InSampler",
@@ -174,7 +174,7 @@
     },
     {
       "vertex_shader": "minecraft:core/screenquad",
-      "fragment_shader": "shine:post/fast_blur",
+      "fragment_shader": "shine:post/bloom_blur_horizontal",
       "inputs": [
         {
           "sampler_name": "InSampler",
@@ -201,7 +201,7 @@
     },
     {
       "vertex_shader": "minecraft:core/screenquad",
-      "fragment_shader": "shine:post/fast_blur",
+      "fragment_shader": "shine:post/bloom_blur_vertical",
       "inputs": [
         {
           "sampler_name": "InSampler",

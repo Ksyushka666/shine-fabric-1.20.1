@@ -154,7 +154,7 @@ public final class BloomPostProcessor {
             setUniform(effect, "SoftKnee", (float) config.softKnee);
             setUniform(effect, "MaxDistance", (float) config.bloomDistance);
             setUniform(effect, "DistanceFadeRange", (float) Math.max(1.0, config.bloomDistance * 0.25));
-            if (effectName.endsWith("fast_blur")) {
+            if (effectName.endsWith("bloom_blur_horizontal") || effectName.endsWith("bloom_blur_vertical")) {
                 double radius = blurIndex < activeBlurPasses
                     ? (blurIndex < 2 ? config.tinyRadius : blurIndex < 4 ? config.radius : config.broadRadius)
                     : 0.0;

@@ -277,7 +277,7 @@ The latest `gradle clean check build` completed successfully with all 27 tasks p
 
 ## Latest continuation: resource-to-hook parity
 
-Added `resourceHookAudit` to Gradle `check`. It verifies all 84 particle definitions are represented by common registration, the generic client factory loop is active, the `post_effect/bloom_poc.json` resource exists, both world-render hooks are registered, the PostProcessor references the active chain, and both bundled configuration baselines are present. The initial audit correctly exposed path/registration assumptions in the audit itself; those were aligned with the actual 1.20.1 implementation. Final result: 84 particle definitions, one active PostChain resource, two world hooks and zero errors.
+Added `resourceHookAudit` to Gradle `check`. It verifies all 84 particle definitions are represented by common registration, the generic client factory loop is active, the `shaders/post/bloom_poc.json` resource exists, both world-render hooks are registered, the PostProcessor references the active chain, and both bundled configuration baselines are present. The initial audit correctly exposed path/registration assumptions in the audit itself; those were aligned with the actual 1.20.1 implementation. Final result: 84 particle definitions, one active PostChain resource, two world hooks and zero errors.
 
 The latest `gradle clean check build` completed successfully with all 28 tasks passing.
 

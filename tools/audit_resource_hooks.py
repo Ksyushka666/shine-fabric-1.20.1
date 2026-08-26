@@ -16,7 +16,7 @@ for path in particle_json:
     particle_id = path.stem
     if f'"{particle_id}"' not in registry: errors.append(f"particle type not registered: {particle_id}")
 if "for (SimpleParticleType type : types.values())" not in client_registry: errors.append("generic particle factory loop missing")
-if not (ROOT / "src/main/resources/assets/shine/post_effect/bloom_poc.json").is_file(): errors.append("active bloom PostChain JSON missing")
+if not (ROOT / "src/main/resources/assets/shine/shaders/post/bloom_poc.json").is_file(): errors.append("active bloom PostChain JSON missing")
 if "BloomPostProcessor::prepareSourceIfEnabled" not in client or "BloomPostProcessor::renderIfEnabled" not in client: errors.append("active bloom world hooks missing")
 if "bloom_poc" not in post: errors.append("PostProcessor does not reference active bloom_poc chain")
 for required in ("defaults/shine.json", "defaults/experimental.json"):

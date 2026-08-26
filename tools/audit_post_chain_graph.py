@@ -5,7 +5,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 RESOURCE = ROOT / "src/main/resources/assets"
-CHAIN = RESOURCE / "shine/post_effect/bloom_poc.json"
+CHAIN = RESOURCE / "shine/shaders/post/bloom_poc.json"
 errors = []
 chain = json.loads(CHAIN.read_text())
 
