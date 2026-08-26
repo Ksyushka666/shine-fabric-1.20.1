@@ -123,6 +123,10 @@ tasks.register("glslOutputAudit", Exec) {
 	commandLine "python3", "tools/audit_glsl_outputs.py"
 }
 
+tasks.register("particleMemoryAudit", Exec) {
+	commandLine "python3", "tools/audit_particle_memory.py"
+}
+
 tasks.register("runtimeHardeningAudit", Exec) {
 	commandLine "python3", "tools/audit_runtime_hardening.py"
 }
@@ -153,7 +157,7 @@ tasks.named("test") {
 }
 
 tasks.named("check") {
-	dependsOn "portPipelineTest", "visualResourceAudit", "shaderOverlayAudit", "postChainGraphAudit", "artifactParityAudit", "cleanRuntimeAudit", "cleanClientAudit", "finalMetadataAudit", "renderCallbackAudit", "sourceParityAudit", "packageCleanlinessAudit", "mixinEnvironmentAudit", "glslOutputAudit", "runtimeHardeningAudit", "runtimeCallbackAudit", "configIntegrationAudit", "remappedArtifactAudit", "resourceHookAudit", "remapWarningAudit"
+	dependsOn "portPipelineTest", "visualResourceAudit", "shaderOverlayAudit", "postChainGraphAudit", "artifactParityAudit", "cleanRuntimeAudit", "cleanClientAudit", "finalMetadataAudit", "renderCallbackAudit", "sourceParityAudit", "packageCleanlinessAudit", "mixinEnvironmentAudit", "glslOutputAudit", "runtimeHardeningAudit", "runtimeCallbackAudit", "configIntegrationAudit", "particleMemoryAudit", "remappedArtifactAudit", "resourceHookAudit", "remapWarningAudit"
 }
 
 java {
