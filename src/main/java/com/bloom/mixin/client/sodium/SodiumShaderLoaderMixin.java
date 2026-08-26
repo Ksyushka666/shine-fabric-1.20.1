@@ -6,10 +6,21 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import java.util.HashMap;
+import java.util.Map;
 
 /** Adds the selective bloom varying only when the complete Sodium 0.5.x template is recognized. */
 @Mixin(value = ShaderLoader.class, remap = false)
 public abstract class SodiumShaderLoaderMixin {
+    /**
+     * ShaderLoader can request a fragment source even when its matching vertex
+     * source was not transformed (for example after Sodium/Iris cache or
+     * reload ordering). Track successful vertex transforms per shader base so
+     * we never emit an unmatched fragment varying.
+     */
+    private static final ThreadLocal<Map<String, Boolean>> SHINE_VERTEX_TRANSFORMS =
+            ThreadLocal.withInitial(HashMap::new);
+
     private static final String VERTEX_COLOR_DECL = "out vec4 v_Color;";
     private static final String VERTEX_LIGHT_LINE = "    v_Color = _vert_color * _sample_lightmap(u_LightTex, _vert_tex_light_coord);";
     private static final String FRAGMENT_COLOR_DECL = "out vec4 fragColor; // The output fragment for the color framebuffer";
@@ -22,10 +33,15 @@ public abstract class SodiumShaderLoaderMixin {
 
         if (name.getPath().endsWith(".vsh")) {
             String transformed = transformVertex(shader);
+            String base = name.getPath().substring(0, name.getPath().length() - 4);
+            SHINE_VERTEX_TRANSFORMS.get().put(base, !transformed.equals(shader));
             if (!transformed.equals(shader)) cir.setReturnValue(transformed);
             return;
         }
         if (name.getPath().endsWith(".fsh")) {
+            String base = name.getPath().substring(0, name.getPath().length() - 4);
+            boolean matchingVertexWasTransformed = Boolean.TRUE.equals(SHINE_VERTEX_TRANSFORMS.get().remove(base));
+            if (!matchingVertexWasTransformed) return;
             String transformed = transformFragment(shader);
             if (!transformed.equals(shader)) cir.setReturnValue(transformed);
         }
