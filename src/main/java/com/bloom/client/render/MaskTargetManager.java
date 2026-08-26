@@ -67,6 +67,7 @@ public final class MaskTargetManager {
         boolean depth = GL11.glIsEnabled(GL11.GL_DEPTH_TEST);
         boolean blend = GL11.glIsEnabled(GL11.GL_BLEND);
         PoseStack modelView = RenderSystem.getModelViewStack();
+        boolean posePushed = false;
         BlockRenderDispatcher dispatcher = Minecraft.getInstance().getBlockRenderer();
         MultiBufferSource.BufferSource buffers = MultiBufferSource.immediate(new com.mojang.blaze3d.vertex.BufferBuilder(1024));
         try {
@@ -75,6 +76,7 @@ public final class MaskTargetManager {
             RenderSystem.enableDepthTest();
             RenderSystem.disableBlend();
             modelView.pushPose();
+            posePushed = true;
             modelView.translate(-cameraX, -cameraY, -cameraZ);
             RenderSystem.applyModelViewMatrix();
             BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
@@ -100,7 +102,7 @@ public final class MaskTargetManager {
         } catch (RuntimeException exception) {
             disableAfterFailure("Selective block mask pass failed; using empty mask", exception);
         } finally {
-            modelView.setIdentity();
+            if (posePushed) modelView.popPose();
             RenderSystem.applyModelViewMatrix();
             target.unbindWrite();
             GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, previousFramebuffer);
