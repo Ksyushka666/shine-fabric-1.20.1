@@ -56,10 +56,8 @@ public final class PortPipelineTest {
         String json = Files.readString(RESOURCES.resolve("assets/shine/shaders/post/bloom_poc.json"));
         String extractProgram = Files.readString(RESOURCES.resolve("assets/shine/shaders/program/bloom_extract.json"));
         String compositeProgram = Files.readString(RESOURCES.resolve("assets/shine/shaders/program/bloom_composite.json"));
-        for (String sampler : new String[] {"DepthSampler", "SourceSampler"}) {
-            require(extractProgram.contains("\"name\": \"" + sampler + "\""), "missing extract sampler binding: " + sampler);
-        }
-        for (String sampler : new String[] {"MainSampler", "HalfSampler", "DepthSampler"}) {
+        require(extractProgram.contains("\"name\": \"DiffuseSampler\""), "missing extract input sampler binding");
+        for (String sampler : new String[] {"HalfSampler", "QuarterSampler", "SixtyfourthSampler"}) {
             require(compositeProgram.contains("\"name\": \"" + sampler + "\""), "missing composite sampler binding: " + sampler);
         }
         for (String uniform : new String[] {"SourceStrengthScale", "DistanceFadeRange", "Weight0", "Weight1", "Weight2", "Weight3", "Weight4", "Weight5"}) {

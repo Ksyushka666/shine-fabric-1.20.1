@@ -2,10 +2,9 @@
   "targets": [ "source", "bloom_extract", "bloom_ping" ],
   "passes": [
     {
-      "name": "shine:bloom_extract",
+      "name": "shine_bloom_extract",
       "intarget": "source",
       "outtarget": "bloom_extract",
-      "auxtargets": [ { "name": "DepthSampler", "id": "minecraft:main" } ],
       "uniforms": [
         { "name": "Threshold", "values": [ 0.65 ] },
         { "name": "SourceStrengthScale", "values": [ 1.25 ] },
@@ -18,30 +17,28 @@
       ]
     },
     {
-      "name": "shine:bloom_blur_horizontal",
+      "name": "shine_bloom_blur_horizontal",
       "intarget": "bloom_extract",
       "outtarget": "bloom_ping",
       "uniforms": [ { "name": "BlurDir", "values": [ 1.0, 0.0 ] }, { "name": "Radius", "values": [ 4.0 ] } ]
     },
     {
-      "name": "shine:bloom_blur_vertical",
+      "name": "shine_bloom_blur_vertical",
       "intarget": "bloom_ping",
       "outtarget": "bloom_extract",
       "uniforms": [ { "name": "BlurDir", "values": [ 0.0, 1.0 ] }, { "name": "Radius", "values": [ 4.0 ] } ]
     },
     {
-      "name": "shine:bloom_composite",
+      "name": "shine_bloom_composite",
       "intarget": "minecraft:main",
       "outtarget": "minecraft:main",
       "auxtargets": [
-        { "name": "MainSampler", "id": "minecraft:main" },
         { "name": "HalfSampler", "id": "bloom_extract" },
         { "name": "QuarterSampler", "id": "bloom_extract" },
         { "name": "EighthSampler", "id": "bloom_extract" },
         { "name": "SixteenthSampler", "id": "bloom_extract" },
         { "name": "ThirtysecondSampler", "id": "bloom_extract" },
-        { "name": "SixtyfourthSampler", "id": "bloom_extract" },
-        { "name": "DepthSampler", "id": "minecraft:main" }
+        { "name": "SixtyfourthSampler", "id": "bloom_extract" }
       ],
       "uniforms": [
         { "name": "Strength", "values": [ 0.85 ] },

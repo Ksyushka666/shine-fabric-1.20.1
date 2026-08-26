@@ -1,7 +1,7 @@
 {
   "blend": { "func": "add", "srcrgb": "one", "dstrgb": "zero" },
   "vertex": "shine_screenquad",
-  "fragment": "bloom_composite",
+  "fragment": "shine_bloom_composite",
   "attributes": [ "Position" ],
   "samplers": [
     { "name": "DiffuseSampler" },
