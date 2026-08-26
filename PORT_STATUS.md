@@ -284,3 +284,7 @@ The latest `gradle clean check build` completed successfully with all 28 tasks p
 ## Public CI portability fix
 
 The public GitHub Actions build initially failed because the runner's Gradle 9 test task treated the JavaExec-based `PortPipelineTest` as a source set with no discovered JUnit tests. The build configuration now disables only the empty JUnit `test` task while retaining `PortPipelineTest` as an explicit `check` dependency. Optional integrations use Maven coordinates instead of local sandbox cache paths. Local `gradle clean check build` passes with 27 tasks.
+
+## Latest continuation: Loom remapping warning validation
+
+Added `remapWarningAudit` to Gradle `check`. It confirms that no obsolete `setShaderTexture` reference or developer-local Gradle cache path remains in the source/build configuration. The observed Loom message was a non-fatal remapping diagnostic from optional dependency processing, not an active source reference. Local `gradle clean check build` passes with 28 tasks.
