@@ -1,0 +1,206 @@
+--- metadata ---
+{
+	"schemaVersion": 1,
+	"id": "shine",
+	"version": "${version}",
+	"name": "Shine",
+	"description": "Adds selective bloom to Minecraft.",
+	"icon": "assets/shine/shine4.png",
+	"authors": [
+		"tapeQ"
+	],
+	"license": "PolyForm Shield License 1.0.0",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.bloom.BloomMod"
+		],
+		"client": [
+			"com.bloom.client.BloomClient"
+		],
+		"modmenu": [
+			"com.bloom.client.config.BloomModMenuIntegration"
+		]
+	},
+	"mixins": [
+		"shine.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.14.22",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": ">=0.92.2+1.20.1"
+	},
+	"suggests": {
+		"modmenu": "*",
+		"yet_another_config_lib_v3": ">=3.2.1+1.20.1-fabric",
+		"sodium": "0.5.x",
+		"iris": "*"
+	}
+}
+--- suspicious resource/API markers ---
+src/main/java/com/bloom/mixin/client/ChunkSectionsToRenderMixin.java.legacy21
+--- resource references ---
+src/main/resources/assets/shine/lang/en_us.json:22:	"shine.config.block_override.desc": "Default: %s. Fluids use fluid ID and legacy fluid-block ID (for example, minecraft:water).",
+src/main/resources/assets/shine/post_effect/bloom_poc.json:10:      "vertex_shader": "minecraft:core/screenquad",
+src/main/resources/assets/shine/post_effect/bloom_poc.json:11:      "fragment_shader": "shine:post/bloom_extract",
+src/main/resources/assets/shine/post_effect/bloom_poc.json:15:          "target": "minecraft:main",
+src/main/resources/assets/shine/post_effect/bloom_poc.json:68:      "vertex_shader": "minecraft:core/screenquad",
+src/main/resources/assets/shine/post_effect/bloom_poc.json:69:      "fragment_shader": "shine:post/fast_blur",
+src/main/resources/assets/shine/post_effect/bloom_poc.json:95:      "vertex_shader": "minecraft:core/screenquad",
+src/main/resources/assets/shine/post_effect/bloom_poc.json:96:      "fragment_shader": "shine:post/fast_blur",
+src/main/resources/assets/shine/post_effect/bloom_poc.json:122:      "vertex_shader": "minecraft:core/screenquad",
+src/main/resources/assets/shine/post_effect/bloom_poc.json:123:      "fragment_shader": "shine:post/fast_blur",
+src/main/resources/assets/shine/post_effect/bloom_poc.json:149:      "vertex_shader": "minecraft:core/screenquad",
+src/main/resources/assets/shine/post_effect/bloom_poc.json:150:      "fragment_shader": "shine:post/fast_blur",
+src/main/resources/assets/shine/post_effect/bloom_poc.json:176:      "vertex_shader": "minecraft:core/screenquad",
+src/main/resources/assets/shine/post_effect/bloom_poc.json:177:      "fragment_shader": "shine:post/fast_blur",
+src/main/resources/assets/shine/post_effect/bloom_poc.json:203:      "vertex_shader": "minecraft:core/screenquad",
+src/main/resources/assets/shine/post_effect/bloom_poc.json:204:      "fragment_shader": "shine:post/fast_blur",
+src/main/resources/assets/shine/post_effect/bloom_poc.json:230:      "vertex_shader": "minecraft:core/screenquad",
+src/main/resources/assets/shine/post_effect/bloom_poc.json:231:      "fragment_shader": "shine:post/bloom_composite",
+src/main/resources/assets/shine/post_effect/bloom_poc.json:235:          "target": "minecraft:main"
+src/main/resources/assets/shine/post_effect/bloom_poc.json:243:          "target": "minecraft:main",
+src/main/resources/assets/shine/post_effect/bloom_poc.json:304:      "output": "minecraft:main"
+src/main/resources/assets/shine/shaders/core/terrain_bloom_source.fsh:3:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/terrain_bloom_source.fsh:4:#moj_import <minecraft:globals.glsl>
+src/main/resources/assets/shine/shaders/core/terrain_bloom_source.fsh:5:#moj_import <minecraft:chunksection.glsl>
+src/main/resources/assets/shine/shaders/core/amethyst_sparkle_particle.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/amethyst_sparkle_particle.fsh:4:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/end_portal_glow_dust.vsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/end_portal_glow_dust.vsh:4:#moj_import <minecraft:projection.glsl>
+src/main/resources/assets/shine/shaders/core/entity_bloom_source.fsh:3:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/entity_bloom_source.fsh:4:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/entity_bloom_source.vsh:3:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/entity_bloom_source.vsh:4:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/entity_bloom_source.vsh:5:#moj_import <minecraft:projection.glsl>
+src/main/resources/assets/shine/shaders/core/fog_fx_bounded_additive.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/fog_fx_bounded_additive.fsh:4:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/fog_fx_sky_stabilized_bounded_additive.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/fog_fx_sky_stabilized_bounded_additive.fsh:4:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/fog_fx_sky_stabilized_soft_alpha.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/fog_fx_sky_stabilized_soft_alpha.fsh:4:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/fog_fx_soft_alpha.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/fog_fx_soft_alpha.fsh:4:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/lava_pop_particle.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/lava_pop_particle.fsh:4:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/lava_spray_flash_particle.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/lava_spray_flash_particle.fsh:4:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/lava_spray_particle.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/lava_spray_particle.fsh:4:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/nether_rays_particle.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/nether_rays_particle.fsh:4:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/night_sky_noise.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/night_sky_noise.vsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/night_sky_noise.vsh:4:#moj_import <minecraft:projection.glsl>
+src/main/resources/assets/shine/shaders/core/particle_bloom_source.fsh:3:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/particle_bloom_source.fsh:4:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/particle_bloom_source.vsh:3:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/particle_bloom_source.vsh:4:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/particle_bloom_source.vsh:5:#moj_import <minecraft:projection.glsl>
+src/main/resources/assets/shine/shaders/core/reactive_water.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/reactive_water.vsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/reactive_water.vsh:4:#moj_import <minecraft:projection.glsl>
+src/main/resources/assets/shine/shaders/core/reactive_water_field.vsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/reactive_water_field.vsh:4:#moj_import <minecraft:projection.glsl>
+src/main/resources/assets/shine/shaders/core/shine_leaf_litter_particle.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/shine_leaf_litter_particle.fsh:4:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/shine_particle_bird_depth_alpha.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/shine_particle_bird_depth_alpha.fsh:4:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/shine_particle_depth_alpha.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/shine_particle_depth_alpha.fsh:4:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/shine_particle_depth_soft_alpha.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/shine_particle_depth_soft_alpha.fsh:4:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/shine_particle_premultiplied_depth_soft_add.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/shine_particle_premultiplied_depth_soft_add.fsh:4:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/shine_particle_premultiplied_soft_add.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/shine_particle_premultiplied_soft_add.fsh:4:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/shine_particle_soft_alpha.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/shine_particle_soft_alpha.fsh:4:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/shine_smooth_sky.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/shine_smooth_sky.vsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/shine_smooth_sky.vsh:4:#moj_import <minecraft:projection.glsl>
+src/main/resources/assets/shine/shaders/core/surface_imprint.fsh:3:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/surface_imprint.vsh:3:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/surface_imprint.vsh:4:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/surface_imprint.vsh:5:#moj_import <minecraft:projection.glsl>
+src/main/resources/assets/shine/shaders/core/trailer_splash_particle.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/trailer_splash_particle.fsh:4:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/trailer_splash_particle.vsh:3:#moj_import <minecraft:fog.glsl>
+src/main/resources/assets/shine/shaders/core/trailer_splash_particle.vsh:4:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/trailer_splash_particle.vsh:5:#moj_import <minecraft:projection.glsl>
+src/main/resources/assets/shine/shaders/core/world_haze.fsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/world_haze.vsh:3:#moj_import <minecraft:dynamictransforms.glsl>
+src/main/resources/assets/shine/shaders/core/world_haze.vsh:4:#moj_import <minecraft:projection.glsl>
+src/main/resources/assets/shine/shaders/post/fast_blur.fsh:3:#moj_import <minecraft:globals.glsl>
+src/main/resources/assets/shine/api/feature_catalog.json:6:      "id": "shine:all",
+src/main/resources/assets/shine/api/feature_catalog.json:12:        "shine:master"
+src/main/resources/assets/shine/api/feature_catalog.json:16:      "id": "shine:shine_effects_master",
+src/main/resources/assets/shine/api/feature_catalog.json:19:      "parent": "shine:all",
+src/main/resources/assets/shine/api/feature_catalog.json:21:        "shine:all"
+src/main/resources/assets/shine/api/feature_catalog.json:27:      "id": "shine:lighting",
+src/main/resources/assets/shine/api/feature_catalog.json:30:      "parent": "shine:shine_effects_master",
+src/main/resources/assets/shine/api/feature_catalog.json:32:        "shine:shine_effects_master"
+src/main/resources/assets/shine/api/feature_catalog.json:38:      "id": "shine:post_processing",
+src/main/resources/assets/shine/api/feature_catalog.json:41:      "parent": "shine:all",
+src/main/resources/assets/shine/api/feature_catalog.json:43:        "shine:all"
+src/main/resources/assets/shine/api/feature_catalog.json:49:      "id": "shine:world",
+src/main/resources/assets/shine/api/feature_catalog.json:52:      "parent": "shine:shine_effects_master",
+src/main/resources/assets/shine/api/feature_catalog.json:54:        "shine:shine_effects_master"
+src/main/resources/assets/shine/api/feature_catalog.json:60:      "id": "shine:particles",
+src/main/resources/assets/shine/api/feature_catalog.json:63:      "parent": "shine:shine_effects_master",
+src/main/resources/assets/shine/api/feature_catalog.json:65:        "shine:shine_effects_master"
+src/main/resources/assets/shine/api/feature_catalog.json:71:      "id": "shine:interaction",
+src/main/resources/assets/shine/api/feature_catalog.json:74:      "parent": "shine:shine_effects_master",
+src/main/resources/assets/shine/api/feature_catalog.json:76:        "shine:shine_effects_master"
+src/main/resources/assets/shine/api/feature_catalog.json:82:      "id": "shine:weather",
+src/main/resources/assets/shine/api/feature_catalog.json:85:      "parent": "shine:shine_effects_master",
+src/main/resources/assets/shine/api/feature_catalog.json:87:        "shine:shine_effects_master"
+src/main/resources/assets/shine/api/feature_catalog.json:93:      "id": "shine:camera",
+src/main/resources/assets/shine/api/feature_catalog.json:96:      "parent": "shine:shine_effects_master",
+src/main/resources/assets/shine/api/feature_catalog.json:98:        "shine:shine_effects_master"
+src/main/resources/assets/shine/api/feature_catalog.json:104:      "id": "shine:sound",
+src/main/resources/assets/shine/api/feature_catalog.json:107:      "parent": "shine:shine_effects_master",
+src/main/resources/assets/shine/api/feature_catalog.json:109:        "shine:shine_effects_master"
+src/main/resources/assets/shine/api/feature_catalog.json:115:      "id": "shine:custom",
+src/main/resources/assets/shine/api/feature_catalog.json:118:      "parent": "shine:shine_effects_master",
+src/main/resources/assets/shine/api/feature_catalog.json:120:        "shine:shine_effects_master"
+src/main/resources/assets/shine/api/feature_catalog.json:126:      "id": "shine:bloom",
+src/main/resources/assets/shine/api/feature_catalog.json:129:      "parent": "shine:post_processing",
+src/main/resources/assets/shine/api/feature_catalog.json:131:        "shine:post_processing"
+src/main/resources/assets/shine/api/feature_catalog.json:137:      "id": "shine:bloom_masks",
+src/main/resources/assets/shine/api/feature_catalog.json:140:      "parent": "shine:bloom",
+src/main/resources/assets/shine/api/feature_catalog.json:142:        "shine:bloom"
+src/main/resources/assets/shine/api/feature_catalog.json:148:      "id": "shine:rim_light",
+src/main/resources/assets/shine/api/feature_catalog.json:151:      "parent": "shine:post_processing",
+src/main/resources/assets/shine/api/feature_catalog.json:153:        "shine:post_processing"
+src/main/resources/assets/shine/api/feature_catalog.json:157:        "shine:rimlight"
+src/main/resources/assets/shine/api/feature_catalog.json:161:      "id": "shine:experimental_post",
+src/main/resources/assets/shine/api/feature_catalog.json:164:      "parent": "shine:post_processing",
+src/main/resources/assets/shine/api/feature_catalog.json:166:        "shine:post_processing",
+src/main/resources/assets/shine/api/feature_catalog.json:167:        "shine:camera"
+src/main/resources/assets/shine/api/feature_catalog.json:173:      "id": "shine:shading",
+src/main/resources/assets/shine/api/feature_catalog.json:176:      "parent": "shine:all",
+src/main/resources/assets/shine/api/feature_catalog.json:178:        "shine:all"
+src/main/resources/assets/shine/api/feature_catalog.json:184:      "id": "shine:colored_lighting",
+src/main/resources/assets/shine/api/feature_catalog.json:187:      "parent": "shine:all",
+src/main/resources/assets/shine/api/feature_catalog.json:189:        "shine:all"
+src/main/resources/assets/shine/api/feature_catalog.json:193:        "shine:colored_lights"
+src/main/resources/assets/shine/api/feature_catalog.json:197:      "id": "shine:water_reflections",
+src/main/resources/assets/shine/api/feature_catalog.json:200:      "parent": "shine:lighting",
+src/main/resources/assets/shine/api/feature_catalog.json:202:        "shine:lighting"
+src/main/resources/assets/shine/api/feature_catalog.json:208:      "id": "shine:world_shadow",
+src/main/resources/assets/shine/api/feature_catalog.json:211:      "parent": "shine:lighting",
+src/main/resources/assets/shine/api/feature_catalog.json:213:        "shine:lighting"
+src/main/resources/assets/shine/api/feature_catalog.json:219:      "id": "shine:canopy_shade",
+src/main/resources/assets/shine/api/feature_catalog.json:222:      "parent": "shine:lighting",
+src/main/resources/assets/shine/api/feature_catalog.json:224:        "shine:lighting"
+src/main/resources/assets/shine/api/feature_catalog.json:230:      "id": "shine:plant_contact_shadows",
+src/main/resources/assets/shine/api/feature_catalog.json:233:      "parent": "shine:lighting",
+src/main/resources/assets/shine/api/feature_catalog.json:235:        "shine:lighting"
+src/main/resources/assets/shine/api/feature_catalog.json:241:      "id": "shine:god_rays",
+src/main/resources/assets/shine/api/feature_catalog.json:244:      "parent": "shine:lighting",
+src/main/resources/assets/shine/api/feature_catalog.json:246:        "shine:lighting"
+--- source/resource file counts ---
+1445
+28
