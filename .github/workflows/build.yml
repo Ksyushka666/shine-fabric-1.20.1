@@ -71,9 +71,34 @@ jobs:
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         env:
           MOD_VERSION: ${{ env.MOD_VERSION }}
+        shell: bash
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Multiple older runs may finish close together. Re-read origin and only
+          # commit when the remote has not already recorded this version.
+          git fetch origin master
+          remote_version=$(git show origin/master:gradle.properties | sed -n 's/^mod_version=//p')
+          if [[ "$remote_version" == "$MOD_VERSION" ]]; then
+            echo "Version ${MOD_VERSION} is already recorded on origin; nothing to push."
+            exit 0
+          fi
+          sed -i "s/^mod_version=.*/mod_version=${MOD_VERSION}/" gradle.properties
           git add gradle.properties
           git commit -m "chore: bump mod version to ${MOD_VERSION} [skip ci]"
-          git push origin HEAD:master
+          for attempt in 1 2 3 4 5; do
+            if git push origin HEAD:master; then exit 0; fi
+            git fetch origin master
+            git reset --hard origin/master
+            remote_version=$(git show origin/master:gradle.properties | sed -n 's/^mod_version=//p')
+            if [[ "$remote_version" == "$MOD_VERSION" ]]; then
+              echo "Another run recorded version ${MOD_VERSION}; push is complete."
+              exit 0
+            fi
+            sed -i "s/^mod_version=.*/mod_version=${MOD_VERSION}/" gradle.properties
+            git add gradle.properties
+            git commit -m "chore: bump mod version to ${MOD_VERSION} [skip ci]"
+          done
+          echo "Unable to push version bump after retries" >&2
+          exit 1
