@@ -1,5 +1,5 @@
 {
-  "targets": [ "source", "bloom_extract", "bloom_ping" ],
+  "targets": [ "source", "scene", "bloom_extract", "bloom_ping" ],
   "passes": [
     {
       "name": "shine_bloom_extract",
@@ -26,7 +26,7 @@
     },
     {
       "name": "shine_bloom_composite",
-      "intarget": "minecraft:main",
+      "intarget": "scene",
       "outtarget": "minecraft:main",
       "auxtargets": [
         { "name": "HalfSampler", "id": "bloom_extract" },

@@ -71,12 +71,14 @@ public final class BloomPostProcessor {
         if (chain == null) return;
 
         RenderTarget chainSource = chain.getTempTarget("source");
+        RenderTarget chainScene = chain.getTempTarget("scene");
         int[] previousViewport = new int[4];
         GL11.glGetIntegerv(GL11.GL_VIEWPORT, previousViewport);
         boolean previousBlend = GL11.glIsEnabled(GL11.GL_BLEND);
         boolean previousDepth = GL11.glIsEnabled(GL11.GL_DEPTH_TEST);
         try {
             if (chainSource != null) copyTarget(main, chainSource);
+            if (chainScene != null) copyTarget(main, chainScene);
             applyConfigUniforms(chain, config);
             chain.process(0.0F);
         } catch (RuntimeException exception) {
