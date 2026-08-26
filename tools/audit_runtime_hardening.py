@@ -25,7 +25,11 @@ required_hooks = (
     "BloomPostProcessor.shutdown()",
 )
 for hook in required_hooks:
-    if hook not in client: errors.append(f"lifecycle hook missing: {hook}")
+    if hook == "BloomPostProcessor.shutdown()":
+        if hook not in client and "BloomPostProcessor::shutdown" not in client:
+            errors.append(f"lifecycle hook missing: {hook}")
+    elif hook not in client:
+        errors.append(f"lifecycle hook missing: {hook}")
 if "BloomSelectionState.reset()" not in source: errors.append("frame-boundary selection reset missing")
 if "closeRuntimeChain()" not in processor or "runtimeChain = null" not in processor: errors.append("postprocessor chain cleanup missing")
 print(f"common_sources_checked={len(common_files)}")

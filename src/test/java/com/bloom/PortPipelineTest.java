@@ -102,7 +102,7 @@ public final class PortPipelineTest {
         require(source.contains("destroyBuffers()"), "source RenderTarget cleanup missing");
         require(processor.contains("runtimeChain.close()"), "PostChain cleanup missing");
         require(client.contains("CLIENT_STOPPING"), "client shutdown hook missing");
-        require(client.contains("ClientPlayConnectionEvents.DISCONNECT") && client.contains("BloomPostProcessor.shutdown()"), "world disconnect cleanup hook missing");
+        require(client.contains("ClientPlayConnectionEvents.DISCONNECT") && (client.contains("BloomPostProcessor.shutdown()") || client.contains("BloomPostProcessor::shutdown")), "world disconnect cleanup hook missing");
         require(client.contains("clientInitialized") && client.contains("skipping duplicate registrations"), "client initializer is not idempotent");
         require(processor.contains("irisDisabled = false") && processor.contains("uniformBindingWarningLogged = false"), "post processor shutdown does not reset lifecycle flags");
         require(source.contains("attached"), "framebuffer attachment guard missing");
@@ -297,7 +297,7 @@ public final class PortPipelineTest {
         require(client.contains("WorldRenderEvents.END.register(BloomPostProcessor::renderIfEnabled)"), "bloom must run at world-render END");
         require(!client.contains("WorldRenderEvents.BEFORE_ENTITIES.register"), "bloom must not run before entities");
         require(client.contains("ResourceManagerHelper.get(PackType.CLIENT_RESOURCES)"), "client resource reload listener missing");
-        require(client.contains("BloomPostProcessor.shutdown()") && client.contains("ExperimentalConfigManager.reload()"), "resource reload cleanup/reload callbacks missing");
+        require((client.contains("BloomPostProcessor.shutdown()") || client.contains("BloomPostProcessor::shutdown")) && client.contains("ExperimentalConfigManager.reload()"), "resource reload cleanup/reload callbacks missing");
         require(client.contains("reloadListenerRegistered") && client.contains("if (reloadListenerRegistered) return"), "reload listener registration is not idempotent");
         for (String vanillaMixin : new String[] {"EntityRendererBloomSelectionMixin.java", "ParticleEngineBloomSelectionMixin.java", "LevelRendererBloomAttachmentMixin.java", "ShaderInstanceBloomUniformMixin.java"}) {
             String source = Files.readString(JAVA.resolve("com/bloom/mixin/client/" + vanillaMixin));

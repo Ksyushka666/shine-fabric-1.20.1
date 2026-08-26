@@ -52,8 +52,11 @@ public class BloomClient implements ClientModInitializer {
 		WorldRenderEvents.START.register(BloomPostProcessor::prepareSourceIfEnabled);
 		WorldRenderEvents.END.register(BloomPostProcessor::renderIfEnabled);
 		registerResourceReloadListener();
-		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> BloomPostProcessor.shutdown());
-		ClientLifecycleEvents.CLIENT_STOPPING.register(client -> BloomPostProcessor.shutdown());
+			// DISCONNECT is delivered from the network event path in some Fabric/Sodium
+			// combinations. Never execute GL cleanup directly from that callback: GL
+			// context is owned by Minecraft's render thread.
+			ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> client.execute(BloomPostProcessor::shutdown));
+			ClientLifecycleEvents.CLIENT_STOPPING.register(client -> client.execute(BloomPostProcessor::shutdown));
 
 	}
 
@@ -66,11 +69,13 @@ public class BloomClient implements ClientModInitializer {
 				return new ResourceLocation("shine", "client_resource_reload");
 			}
 
-			@Override
-			public void onResourceManagerReload(net.minecraft.server.packs.resources.ResourceManager manager) {
-				BloomPostProcessor.shutdown();
-				ExperimentalConfigManager.reload();
-			}
+				@Override
+				public void onResourceManagerReload(net.minecraft.server.packs.resources.ResourceManager manager) {
+					// Resource reload callbacks may run outside the render thread. Queue
+					// GPU teardown, while keeping config reload deterministic.
+					net.minecraft.client.Minecraft.getInstance().execute(BloomPostProcessor::shutdown);
+					ExperimentalConfigManager.reload();
+				}
 			});
 	}
 }
