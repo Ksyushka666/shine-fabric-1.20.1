@@ -20,13 +20,13 @@ Little to **no performance loss** when enabled, with support for [Sodium](https:
 
 ## Downloads
 
-The latest verified build is **Shine Fabric 1.20.1 1.0.3**. Download the files directly from [GitHub Releases](https://github.com/Ksyushka666/shine-fabric-1.20.1/releases/tag/v1.0.3-build-10):
+Download the latest verified Shine build from the [GitHub Releases page](https://github.com/Ksyushka666/shine-fabric-1.20.1/releases). Each release contains the versioned mod JAR, sources JAR, and SHA-256 checksums.
 
 | File | Download |
 |---|---|
-| Mod JAR | [shine-fabric-1.20.1-1.0.3.jar](https://github.com/Ksyushka666/shine-fabric-1.20.1/releases/download/v1.0.3-build-10/shine-fabric-1.20.1-1.0.3.jar) |
-| Sources JAR | [shine-fabric-1.20.1-1.0.3-sources.jar](https://github.com/Ksyushka666/shine-fabric-1.20.1/releases/download/v1.0.3-build-10/shine-fabric-1.20.1-1.0.3-sources.jar) |
-| SHA-256 checksums | [SHA256SUMS.txt](https://github.com/Ksyushka666/shine-fabric-1.20.1/releases/download/v1.0.3-build-10/SHA256SUMS.txt) |
+| Latest mod JAR | [GitHub Releases](https://github.com/Ksyushka666/shine-fabric-1.20.1/releases) |
+| Latest sources JAR | [GitHub Releases](https://github.com/Ksyushka666/shine-fabric-1.20.1/releases) |
+| SHA-256 checksums | [GitHub Releases](https://github.com/Ksyushka666/shine-fabric-1.20.1/releases) |
 
 For future builds, the [Releases page](https://github.com/Ksyushka666/shine-fabric-1.20.1/releases) always contains the newest automatically verified download links.
 
@@ -38,12 +38,12 @@ For **Minecraft 1.20.1**, the minimum installation requires **Fabric Loader**, *
 |---|---:|---|
 | Minecraft Java Edition 1.20.1 | Yes | Target game version |
 | Fabric Loader | Yes | Mod loader |
-| Fabric API for 1.20.1 | Yes | Fabric events, registries, and runtime hooks |
-| Shine `shine-fabric-1.20.1-<version>.jar` | Yes | Selective bloom and visual effects |
-| YACL 3.6.6 for 1.20.1 | No | Extended configuration screen |
-| Mod Menu | No | Opens Shine settings from the mods list |
-| Sodium 0.5.x for 1.20.1 | No | Performance optimization and optional compatibility path |
-| Iris for 1.20.1 | No | Shader-pack support and framebuffer ownership guard |
+| Fabric API for 1.20.1 | Yes | [Download JAR](https://cdn.modrinth.com/data/P7dR8mSH/versions/xhLT3C5f/fabric-api-0.92.11%2B1.20.1.jar) |
+| Shine `shine-fabric-1.20.1-<version>.jar` | Yes | [Download latest JAR](https://github.com/Ksyushka666/shine-fabric-1.20.1/releases) |
+| YACL 3.6.6 for 1.20.1 | No | [Download JAR](https://cdn.modrinth.com/data/1eAoo2KR/versions/dvS5DjUA/yet_another_config_lib_v3-3.6.6%2B1.20.1-fabric.jar) |
+| Mod Menu 7.2.2 for 1.20.1 | No | [Download JAR](https://cdn.modrinth.com/data/mOgUt4GM/versions/lEkperf6/modmenu-7.2.2.jar) |
+| Sodium 0.5.13 for 1.20.1 | No | [Download JAR](https://cdn.modrinth.com/data/AANobbMI/versions/OihdIimA/sodium-fabric-0.5.13%2Bmc1.20.1.jar) |
+| Iris 1.7.6 for 1.20.1 | No | [Download JAR](https://cdn.modrinth.com/data/YL57xq9U/versions/s5eFLITc/iris-1.7.6%2Bmc1.20.1.jar) |
 
 A minimal client setup is:
 
