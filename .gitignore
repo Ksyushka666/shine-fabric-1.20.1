@@ -1,2 +1,10 @@
-*.tmp
+.gradle/
+build/
+run/
+.idea/
+.vscode/
+*.iml
 .DS_Store
+hs_err_*.log
+*.hprof
+*.jfr

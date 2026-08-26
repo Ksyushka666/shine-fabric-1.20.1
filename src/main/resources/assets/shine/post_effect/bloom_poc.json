@@ -1,0 +1,307 @@
+{
+  "targets": {
+    "source": {},
+    "bloom_extract": {},
+    "bloom_ping": {},
+    "bloom_pong": {}
+  },
+  "passes": [
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "shine:post/bloom_extract",
+      "inputs": [
+        {
+          "sampler_name": "DepthSampler",
+          "target": "minecraft:main",
+          "use_depth_buffer": true
+        },
+        {
+          "sampler_name": "SourceSampler",
+          "target": "source"
+        }
+      ],
+      "uniforms": [
+        {
+          "name": "Threshold",
+          "type": "float",
+          "value": 0.65
+        },
+        {
+          "name": "SourceStrengthScale",
+          "type": "float",
+          "value": 1.25
+        },
+        {
+          "name": "HighlightClamp",
+          "type": "float",
+          "value": 1.0
+        },
+        {
+          "name": "SoftKnee",
+          "type": "float",
+          "value": 0.2
+        },
+        {
+          "name": "MaxDistance",
+          "type": "float",
+          "value": 64.0
+        },
+        {
+          "name": "NearPlane",
+          "type": "float",
+          "value": 0.05
+        },
+        {
+          "name": "FarPlane",
+          "type": "float",
+          "value": 1024.0
+        },
+        {
+          "name": "DistanceFadeRange",
+          "type": "float",
+          "value": 16.0
+        }
+      ],
+      "output": "bloom_extract"
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "shine:post/fast_blur",
+      "inputs": [
+        {
+          "sampler_name": "InSampler",
+          "target": "bloom_extract",
+          "bilinear": true
+        }
+      ],
+      "uniforms": [
+        {
+          "name": "BlurDir",
+          "type": "vec2",
+          "value": [
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "name": "Radius",
+          "type": "float",
+          "value": 4.0
+        }
+      ],
+      "output": "bloom_ping"
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "shine:post/fast_blur",
+      "inputs": [
+        {
+          "sampler_name": "InSampler",
+          "target": "bloom_ping",
+          "bilinear": true
+        }
+      ],
+      "uniforms": [
+        {
+          "name": "BlurDir",
+          "type": "vec2",
+          "value": [
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "name": "Radius",
+          "type": "float",
+          "value": 4.0
+        }
+      ],
+      "output": "bloom_pong"
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "shine:post/fast_blur",
+      "inputs": [
+        {
+          "sampler_name": "InSampler",
+          "target": "bloom_pong",
+          "bilinear": true
+        }
+      ],
+      "uniforms": [
+        {
+          "name": "BlurDir",
+          "type": "vec2",
+          "value": [
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "name": "Radius",
+          "type": "float",
+          "value": 0.0
+        }
+      ],
+      "output": "bloom_ping"
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "shine:post/fast_blur",
+      "inputs": [
+        {
+          "sampler_name": "InSampler",
+          "target": "bloom_ping",
+          "bilinear": true
+        }
+      ],
+      "uniforms": [
+        {
+          "name": "BlurDir",
+          "type": "vec2",
+          "value": [
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "name": "Radius",
+          "type": "float",
+          "value": 0.0
+        }
+      ],
+      "output": "bloom_pong"
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "shine:post/fast_blur",
+      "inputs": [
+        {
+          "sampler_name": "InSampler",
+          "target": "bloom_pong",
+          "bilinear": true
+        }
+      ],
+      "uniforms": [
+        {
+          "name": "BlurDir",
+          "type": "vec2",
+          "value": [
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "name": "Radius",
+          "type": "float",
+          "value": 0.0
+        }
+      ],
+      "output": "bloom_ping"
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "shine:post/fast_blur",
+      "inputs": [
+        {
+          "sampler_name": "InSampler",
+          "target": "bloom_ping",
+          "bilinear": true
+        }
+      ],
+      "uniforms": [
+        {
+          "name": "BlurDir",
+          "type": "vec2",
+          "value": [
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "name": "Radius",
+          "type": "float",
+          "value": 0.0
+        }
+      ],
+      "output": "bloom_pong"
+    },
+    {
+      "vertex_shader": "minecraft:core/screenquad",
+      "fragment_shader": "shine:post/bloom_composite",
+      "inputs": [
+        {
+          "sampler_name": "MainSampler",
+          "target": "minecraft:main"
+        },
+        {
+          "sampler_name": "HalfSampler",
+          "target": "bloom_pong"
+        },
+        {
+          "sampler_name": "DepthSampler",
+          "target": "minecraft:main",
+          "use_depth_buffer": true
+        }
+      ],
+      "uniforms": [
+        {
+          "name": "Strength",
+          "type": "float",
+          "value": 0.85
+        },
+        {
+          "name": "MaxDistance",
+          "type": "float",
+          "value": 64.0
+        },
+        {
+          "name": "NearPlane",
+          "type": "float",
+          "value": 0.05
+        },
+        {
+          "name": "FarPlane",
+          "type": "float",
+          "value": 1024.0
+        },
+        {
+          "name": "Weight0",
+          "type": "float",
+          "value": 1.0
+        },
+        {
+          "name": "Weight1",
+          "type": "float",
+          "value": 0.65
+        },
+        {
+          "name": "Weight2",
+          "type": "float",
+          "value": 0.35
+        },
+        {
+          "name": "Weight3",
+          "type": "float",
+          "value": 0.2
+        },
+        {
+          "name": "Weight4",
+          "type": "float",
+          "value": 0.1
+        },
+        {
+          "name": "Weight5",
+          "type": "float",
+          "value": 0.05
+        },
+        {
+          "name": "DistanceFadeRange",
+          "type": "float",
+          "value": 16.0
+        }
+      ],
+      "output": "minecraft:main"
+    }
+  ]
+}
